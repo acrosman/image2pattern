@@ -3,6 +3,10 @@
 const Jimp = require('jimp');
 const fs = require('fs');
 
+// TODO: make this an input.
+const maxWidth = 150;
+const maxHeigh = 150;
+
 // function gcd(a, b) {
 //   return (b === 0) ? a : gcd(b, a % b);
 // }
@@ -13,15 +17,9 @@ Jimp.read('sample.png')
     let width = image.getWidth();
     let pixColor = 0;
 
-    // This is all for later when adjusting sizes.
-    // const ratioGcd = gcd(width, height);
-    // const ratioFloat = width / height;
-    // let newHeight = (height / ratioGcd) * 100;
-    // let newWidth = (originalWidth / ratioGcd) * 100;
-
     const preppedImage = image
-      // .resize(newWidth, newHeight) // resize
-      .quality(60) // set JPEG quality
+      .scaleToFit(maxWidth, maxHeigh) // Scale to fit the limits.
+      .contrast(1) // Max out the contrast.
       .greyscale(); // set greyscale
 
     height = preppedImage.getHeight();
@@ -39,7 +37,7 @@ Jimp.read('sample.png')
             stream.write('x');
             map[i][j] = 'x';
           } else {
-            stream.write('o');
+            stream.write(' ');
             map[i][j] = 'o';
           }
         }
