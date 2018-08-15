@@ -1,0 +1,18 @@
+{
+  "name": "image2pattern",
+  "version": "0.0.1",
+  "description": "A simple app to convert an image to a cross stitch pattern.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "images",
+    "cross-stitch"
+  ],
+  "author": "Aaron Crosman",
+  "license": "MIT",
+  "dependencies": {
+    "jimp": "^0.3.5"
+  }
+}
