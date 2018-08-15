@@ -20,7 +20,8 @@ Jimp.read('sample.png')
     const preppedImage = image
       .scaleToFit(maxWidth, maxHeigh) // Scale to fit the limits.
       .contrast(1) // Max out the contrast.
-      .greyscale(); // set greyscale
+      .greyscale() // set greyscale.
+      .write('processed.jpg');
 
     height = preppedImage.getHeight();
     width = preppedImage.getWidth();
@@ -28,17 +29,17 @@ Jimp.read('sample.png')
     // For each pixal if it is dark save an X otherwise and O.
     const stream = fs.createWriteStream('pattern.txt');
     stream.once('open', () => {
-      const map = new Array(width);
-      for (let i = 0; i < width; i += 1) {
-        map[i] = new Array(height);
-        for (let j = 0; j < height; j += 1) {
-          pixColor = preppedImage.getPixelColor(i, j);
+      const map = new Array(height);
+      for (let i = 0; i < height; i += 1) {
+        map[i] = new Array(width);
+        for (let j = 0; j < width; j += 1) {
+          pixColor = preppedImage.getPixelColor(j, i);
           if (pixColor < 10000) {
             stream.write('x');
-            map[i][j] = 'x';
+            map[i][j] = 1;
           } else {
-            stream.write(' ');
-            map[i][j] = 'o';
+            stream.write('o');
+            map[i][j] = 0;
           }
         }
         stream.write('\n');
