@@ -12,12 +12,14 @@
   ],
   "author": "Aaron Crosman",
   "license": "MIT",
+  "repository": "https://github.com/acrosman/image2pattern",
   "dependencies": {
     "eslint": "^5.3.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
-    "jimp": "^0.3.5"
+    "jimp": "^0.3.5",
+    "pdfkit": "^0.8.3"
   }
 }
