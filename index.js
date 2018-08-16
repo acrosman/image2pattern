@@ -7,10 +7,7 @@ const fs = require('fs');
 const maxWidth = 150;
 const maxHeigh = 150;
 
-// function gcd(a, b) {
-//   return (b === 0) ? a : gcd(b, a % b);
-// }
-
+// TODO: make image location an input.
 Jimp.read('sample.png')
   .then((image) => {
     let height = image.getHeight();
@@ -21,7 +18,7 @@ Jimp.read('sample.png')
       .scaleToFit(maxWidth, maxHeigh) // Scale to fit the limits.
       .contrast(1) // Max out the contrast.
       .greyscale() // set greyscale.
-      .write('processed.jpg');
+      .write('images/processed.jpg');
 
     height = preppedImage.getHeight();
     width = preppedImage.getWidth();
