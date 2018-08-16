@@ -1,6 +1,6 @@
 # Default output during dev.
-pattern.txt
 images
+outputs
 
 # Logs
 logs
