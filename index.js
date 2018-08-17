@@ -4,9 +4,10 @@ const Jimp = require('jimp');
 const fs = require('fs');
 const PdfKit = require('pdfkit');
 
-// TODO: make this an input.
+// TODO: make these inputs.
 const maxWidth = 150;
 const maxHeigh = 150;
+const outputLocation = 'outputs';
 
 // TODO: make image location an input.
 Jimp.read('sample.png')
@@ -19,13 +20,13 @@ Jimp.read('sample.png')
       .scaleToFit(maxWidth, maxHeigh) // Scale to fit the limits.
       .contrast(1) // Max out the contrast.
       .greyscale() // set greyscale.
-      .write('outputs/images/processed.jpg');
+      .write(outputLocation + '/images/processed.jpg');
 
     height = preppedImage.getHeight();
     width = preppedImage.getWidth();
 
     const pdfFile = new PdfKit();
-    pdfFile.pipe(fs.createWriteStream('outputs/pattern.pdf'));
+    pdfFile.pipe(fs.createWriteStream(outputLocation + '/pattern.pdf'));
     pdfFile.fontSize(25)
       .text('This is a PDF meant to become a stitchable pattern.', 100, 80);
     pdfFile.addPage({ layout: 'landscape' });
