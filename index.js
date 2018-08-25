@@ -3,6 +3,9 @@
 const Jimp = require('jimp');
 const fs = require('fs');
 const PdfKit = require('pdfkit');
+const Svg2Pdf = require('svg-to-pdfkit');
+const window = require('svgdom');
+const SVG = require('svgjs')(window);
 
 // TODO: make these inputs.
 const maxWidth = 150;
@@ -12,12 +15,64 @@ const edgeMargin = 50;
 const pageMargin = 50;
 const boxSize = 10;
 
+function drawPatternPage(image, startX, startY, width, height) {
+  // TODO: allow these to be inputs.
+  const darkColor = '#444'; // Dark square fill color.
+  const lightColor = '#FF3'; // Light square fill color.
+  const lineColor = '#000'; // Color of the grid.
+  const breakColor = '10000'; // Value of light vs dark squares.
+  const fillOpacity = '0.3'; // Opacity of the boxes.
+  const drawingWidth = boxSize * width;
+  const drawingHeight = boxSize * height;
+
+  let rx; let ry; let pixColor;
+  let currentX = startX;
+  let currentY = startY;
+  let currentColor = lightColor;
+
+  // console.log(`Creating image starting at ${startX}x${startY} to cover ${width}x${height}`)
+
+  const draw = SVG(window.document).size(drawingWidth, drawingHeight);
+
+  for (let i = 0; i < height; i += 1) {
+    ry = i * boxSize;
+    currentX = startX;
+
+    // console.log(`Starting row: ${i}`);
+
+    for (let j = 0; j < width; j += 1) {
+      // Get the current pixal color and map to box background.
+      pixColor = image.getPixelColor(currentX, currentY);
+      // TODO: Handle more than monochrome patterns.
+      let side = '';
+      if (pixColor < breakColor) {
+        currentColor = darkColor;
+        side = 'dark';
+      } else {
+        currentColor = lightColor;
+        side = 'light';
+      }
+      // Determine the location of this box, and draw.
+      rx = j * boxSize;
+      draw.rect(boxSize, boxSize)
+        .move(rx, ry)
+        .fill(currentColor)
+        .stroke(lineColor)
+        .opacity(fillOpacity);
+      // console.log(`Pixel ${currentX}x${currentY}: printed at: ${rx}x${ry} as ${side}`);
+      currentX += 1;
+    }
+    currentY += 1;
+  }
+
+  return draw;
+}
+
 // TODO: make image location an input.
 Jimp.read('sample.png')
   .then((image) => {
     let height = image.getHeight();
     let width = image.getWidth();
-    let pixColor = 0;
 
     // TODO: Handle more than monochrome patterns
     const preppedImage = image
@@ -52,56 +107,58 @@ Jimp.read('sample.png')
     pdfFile.text(`Each page can hold ${pageBoxCountWidth} boxes across and ${pageBoxCountHeight} down.`);
     pdfFile.text(`So this file is ${pagesWide} pages wide and ${pagesTall} pages tall.`);
 
-    let rx; let ry; let pageHeight; let pageWidth;
+    let pageHeight; let pageWidth;
     let pageStartX = 0;
     let pageStartY = 0;
-    let currentX = 0;
-    let currentY = 0;
     let page = 1;
 
-    // Yikes! Tripple nested loop
-    // TODO: untangle this a bit.
+    let pageSvg;
+
     while (page <= totalPages) {
       if (pageStartX >= width) {
         pageStartX = 0;
-        pageStartY = currentY;
-      } else {
-        currentY = pageStartY;
+        pageStartY += pageHeight;
       }
 
       // Set the pixal range for this page.
-      pageHeight = Math.min(pageBoxCountHeight, height - currentY);
+      pageHeight = Math.min(pageBoxCountHeight, height - pageStartY);
       pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
 
-      pdfFile.addPage()
-        .text(`Page: ${page}.  ${pageWidth} X ${pageHeight} starting ${pageStartX} x ${currentY}`, 50, 20);
+      // Create an image for just this page.
+      pageSvg = drawPatternPage(preppedImage, pageStartX, pageStartY, pageWidth, pageHeight);
 
-      for (let i = 0; i < pageHeight; i += 1) {
-        ry = (i * boxSize) + pageMargin;
-        currentX = pageStartX;
-        for (let j = 0; j < pageWidth; j += 1) {
-          // Get the current pixal color and map to box background.
-          pixColor = preppedImage.getPixelColor(currentX, currentY);
-          // TODO: Handle more than monochrome patterns.
-          if (pixColor < 10000) {
-            pdfFile.fillAndStroke('#000', '#000');
-          } else {
-            pdfFile.fillAndStroke('#FF6600', '#000');
+      // console.log(`================ Page break ${page} ================`);
+
+      pdfFile.addPage({
+        margins: {
+          top: pageMargin,
+          bottom: pageMargin,
+          left: edgeMargin,
+          right: edgeMargin,
+        },
+      }).text(`Page: ${page}.  ${pageWidth} X ${pageHeight} starting ${pageStartX} x ${pageStartY} box size ${boxSize}`, 50, 20);
+
+      const imageFilePath = `${outputLocation}/images/page-${page}.svg`;
+      fs.writeFile(
+        imageFilePath,
+        pageSvg.svg(),
+        (err) => {
+          if (err) {
+            return console.log(err);
           }
+          // console.log(`${imageFilePath} saved!`);
+          return err;
+        },
+      );
 
-          // Determine the location of this box, and draw.
-          rx = (j * boxSize) + edgeMargin;
-          pdfFile.rect(rx, ry, boxSize, boxSize);
-
-          currentX += 1;
-        }
-
-        currentY += 1;
-      }
+      Svg2Pdf(pdfFile, pageSvg.svg(), edgeMargin, pageMargin);
 
       // Carry the current X position over as the start of the next page.
-      pageStartX = currentX;
+      pageStartX += pageWidth;
       page += 1;
+      // if (page > 2) {
+      //   break;
+      // }
     }
 
     pdfFile.end();

@@ -20,6 +20,9 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
     "jimp": "^0.3.5",
-    "pdfkit": "^0.8.3"
+    "pdfkit": "^0.8.3",
+    "svg-to-pdfkit": "^0.1.7",
+    "svgdom": "0.0.15",
+    "svgjs": "^2.6.2"
   }
 }
