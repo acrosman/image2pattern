@@ -29,6 +29,7 @@ Jimp.read('sample.png')
     height = preppedImage.getHeight();
     width = preppedImage.getWidth();
 
+    // TODO: Add support for picking page size.
     const pdfFile = new PdfKit();
     pdfFile.pipe(fs.createWriteStream(`${outputLocation}/pattern.pdf`));
     pdfFile.fontSize(25)
@@ -43,11 +44,11 @@ Jimp.read('sample.png')
 
     // We have to break the pattern into a series of pages that fit the boxes
     // for the mapped image.
-    const pagesWide = Math.ceil(preppedImage.getWidth() / pageBoxCountWidth);
-    const pagesTall = Math.ceil(preppedImage.getHeight() / pageBoxCountHeight);
+    const pagesWide = Math.ceil(width / pageBoxCountWidth);
+    const pagesTall = Math.ceil(height / pageBoxCountHeight);
     const totalPages = pagesTall * pagesWide;
 
-    pdfFile.text(`This image is ${preppedImage.getWidth()} x ${preppedImage.getHeight()}.`);
+    pdfFile.text(`This image is ${width} x ${height}.`);
     pdfFile.text(`Each page can hold ${pageBoxCountWidth} boxes across and ${pageBoxCountHeight} down.`);
     pdfFile.text(`So this file is ${pagesWide} pages wide and ${pagesTall} pages tall.`);
 
@@ -61,7 +62,7 @@ Jimp.read('sample.png')
     // Yikes! Tripple nested loop
     // TODO: untangle this a bit.
     while (page <= totalPages) {
-      if (pageStartX >= preppedImage.getWidth()) {
+      if (pageStartX >= width) {
         pageStartX = 0;
         pageStartY = currentY;
       } else {
@@ -69,8 +70,8 @@ Jimp.read('sample.png')
       }
 
       // Set the pixal range for this page.
-      pageHeight = Math.min(pageBoxCountHeight, preppedImage.getHeight() - currentY);
-      pageWidth = Math.min(pageBoxCountWidth, preppedImage.getWidth() - pageStartX);
+      pageHeight = Math.min(pageBoxCountHeight, height - currentY);
+      pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
 
       pdfFile.addPage()
         .text(`Page: ${page}.  ${pageWidth} X ${pageHeight} starting ${pageStartX} x ${currentY}`, 50, 20);
