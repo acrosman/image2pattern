@@ -1,8 +1,6 @@
 const fs = require('fs');
 const PdfKit = require('pdfkit');
 const Svg2Pdf = require('svg-to-pdfkit');
-// TODO: figure what this is doing and get it to work with Electron.
-//const window = require('svgdom');
 const SVG = require('svgjs');
 
 const defaultSettings = {
@@ -29,9 +27,8 @@ function drawPatternPage(image, startX, startY, width, height, settings) {
   let currentY = startY;
   let currentColor = config.lightColor;
 
-  console.log(`Creating image starting at ${startX}x${startY} to cover ${width}x${height}`)
+  console.log(`Creating image starting at ${startX}x${startY} to cover ${width}x${height}`);
 
-  // TODO: figure what this is doing and get it to work with Electron.
   const draw = SVG('drawing').size(drawingWidth, drawingHeight);
 
   for (let i = 0; i < height; i += 1) {

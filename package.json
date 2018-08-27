@@ -28,7 +28,6 @@
     "pdfkit": "^0.8.3",
     "popper.js": "^1.14.4",
     "svg-to-pdfkit": "^0.1.7",
-    "svgdom": "0.0.15",
     "svgjs": "^2.6.2"
   },
   "devDependencies": {
