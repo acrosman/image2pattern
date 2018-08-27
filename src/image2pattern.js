@@ -1,8 +1,8 @@
 const fs = require('fs');
 const PdfKit = require('pdfkit');
 const Svg2Pdf = require('svg-to-pdfkit');
-const window = require('svgdom');
-const SVG = require('svgjs')(window);
+//const window = require('svgdom');
+const SVG = require('svgjs');
 
 const defaultSettings = {
   outputLocation: 'outputs',
@@ -28,9 +28,9 @@ function drawPatternPage(image, startX, startY, width, height, settings) {
   let currentY = startY;
   let currentColor = config.lightColor;
 
-  // console.log(`Creating image starting at ${startX}x${startY} to cover ${width}x${height}`)
+  console.log(`Creating image starting at ${startX}x${startY} to cover ${width}x${height}`)
 
-  const draw = SVG(window.document).size(drawingWidth, drawingHeight);
+  const draw = SVG(document).size(drawingWidth, drawingHeight);
 
   for (let i = 0; i < height; i += 1) {
     ry = i * config.boxSize;
@@ -118,7 +118,7 @@ function createPattern(image, settings) {
     // Create an image for just this page.
     pageSvg = drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config);
 
-    // console.log(`================ Page break ${page} ================`);
+    console.log(`================ Page break ${page} ================`);
 
     // TODO: stream pages to disk.
     pdfFile.addPage({
@@ -138,7 +138,7 @@ function createPattern(image, settings) {
         if (err) {
           return console.log(err);
         }
-        // console.log(`${imageFilePath} saved!`);
+        console.log(`${imageFilePath} saved!`);
         return err;
       },
     );
