@@ -2,6 +2,7 @@ const fs = require('fs');
 const PdfKit = require('pdfkit');
 const Svg2Pdf = require('svg-to-pdfkit');
 const SVG = require('svgjs');
+const thread = require('./threadColors.js');
 
 const defaultSettings = {
   outputLocation: 'outputs',
