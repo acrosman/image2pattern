@@ -43,3 +43,29 @@ document.getElementById('select-file').addEventListener('click', () => {
 document.getElementById('generate-pattern').addEventListener('click', () => {
   PrepImage.prepImage(document.getElementById('actual-file').value, {}, I2P.generatePattern);
 }, false);
+
+$(() => {
+  // Basic instantiation of color pickers:
+  $('#dark-color-picker').colorpicker();
+
+  // Example using an event, to change the color of the .jumbotron background:
+  $('#dark-color-picker').on('colorpickerChange', (event) => {
+    $('.jumbotron').css('background-color', event.color.toString());
+  });
+
+  // Basic instantiation of color pickers:
+  $('#light-color-picker').colorpicker();
+
+  // Example using an event, to change the color of the .jumbotron background:
+  $('#light-color-picker').on('colorpickerChange', (event) => {
+    $('.jumbotron').css('background-color', event.color.toString());
+  });
+
+  // Basic instantiation of color pickers:
+  $('#grid-color-picker').colorpicker();
+
+  // Example using an event, to change the color of the .jumbotron background:
+  $('#grid-color-picker').on('colorpickerChange', (event) => {
+    $('.jumbotron').css('background-color', event.color.toString());
+  });
+});

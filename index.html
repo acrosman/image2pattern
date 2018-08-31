@@ -5,34 +5,104 @@
   <meta charset="UTF-8">
   <title>Image2Pattern</title>
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css">
+  <!-- Hattip: https://stackoverflow.com/a/37480521/24215 -->
+  <script>
+    if (typeof module === 'object') {
+      window.module = module;
+      module = undefined;
+    }
+  </script>
+
+  <script src="node_modules/popper.js/dist/umd/popper.js"></script>
+  <script src="node_modules/popper.js/dist/umd/popper-utils.js"></script>
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js"></script>
+
+  <script>
+    if (window.module) module = window.module;
+  </script>
 </head>
 
 <body>
-  <h1>Converting images to cross-stitch patterns</h1>
-  <!-- All of the Node.js APIs are available in this renderer process. -->
-  <p>We are using Node.js
-    <script>
-      document.write(process.versions.node)
-    </script>, Chromium
-    <script>
-      document.write(process.versions.chrome)
-    </script>, and Electron
-    <script>
-      document.write(process.versions.electron)
-    </script>.</p>
-    <hr>
-  <div style="text-align:center;">
-    <input type="text" placeholder="Please select a file" id="actual-file" disabled="disabled" />
-    <input type="button" value="Choose a file" id="select-file" />
-    <input type="button" value="Generate Pattern" id="generate-pattern" />
-  </div>
-  <hr>
-  <h2>Messages</h2>
-  <div id="console-logger">
-    <ol id="console-message-list"></ol>
-  </div>
   <div id="drawing" style="display: none;"></div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Converting images to cross-stitch patterns</h1>
+        <!-- All of the Node.js APIs are available in this renderer process. -->
+        <p>We are using Node.js
+          <script>
+            document.write(process.versions.node)
+          </script>, Chromium
+          <script>
+            document.write(process.versions.chrome)
+          </script>, and Electron
+          <script>
+            document.write(process.versions.electron)
+          </script>.</p>
+        <div style="text-align:center;">
+          <label for="actual-file">Select Source File</label>
+          <input type="text" placeholder="Please select a file" id="actual-file" disabled="disabled" />
+          <button type="button" class="btn green btn-secondary" id="select-file">Choose a file</button>
+          <button type="button" class="btn btn-primary" id="generate-pattern">Generate Pattern</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p><strong>Settings:</strong></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <label for="actual-file">Select Output Location</label>
+        <input type="text" value="./output" id="output-folder" disabled="disabled" />
+        <button type="button" class="btn green btn-secondary" id="select-output-folder">Choose a folder</button>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+        <label for="edge-margin">Page edge margin</label>
+        <input type="number" value="50" max=500 min=0 id="edge-margin"></div>
+        <div class="form-group">
+        <label for="page-margin">Page top margin</label>
+        <input type="number" value="50" max=500 min=0 id="page-margin"></div>
+        <div class="form-group">
+        <label for="box-size">Box Size</label>
+        <input type="number" value="10" max=100 min=1 id="box-size">
+      </div>
+      </div>
+      <div class="col-md-4">
+        <p>Monochrome controls</p>
+        <label for="dark-color-picker">Dark color</label>
+        <input id="dark-color-picker" type="text" class="form-control" value="rgb(4, 4, 4)" />
+        <label for="light-color-picker">Light color</label>
+        <input id="light-color-picker" type="text" class="form-control" value="rgb(F, F, 3)" />
+        <label for="grid-color-picker">Grid line color</label>
+        <input id="grid-color-picker" type="text" class="form-control" value="rgb(0, 0, 0)" />
+
+        <label for="break-color">Break point (color index to break as dark vs light)</label>
+        <input type="number" value="10000" id="break-color">
+        <label for="opacity-level">Fill Opacity</label>
+        <input type="number" value="0.3" step=0.1 max=1 min=0 id="opacity-level">
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Messages</h2>
+        <div id="console-logger">
+          <ol id="console-message-list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
+
+
 <script>
   // You can also require other files to run in this process
   require('./src/renderer.js')
