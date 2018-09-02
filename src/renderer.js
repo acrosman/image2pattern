@@ -30,7 +30,9 @@ console.debug = console.log;
 console.info = console.log;
 
 document.getElementById('select-file').addEventListener('click', () => {
-  dialog.showOpenDialog((fileNames) => {
+  dialog.showOpenDialog({
+    filters: { name: 'Images', extensions: ['png', 'jpg', 'gif', 'tiff', 'jpeg'] },
+  }, (fileNames) => {
     if (fileNames === undefined) {
       console.log('No file selected');
     } else {
@@ -40,9 +42,21 @@ document.getElementById('select-file').addEventListener('click', () => {
   });
 }, false);
 
+document.getElementById('select-output-folder').addEventListener('click', () => {
+  dialog.showOpenDialog({
+    properties: ['openDirectory', 'createDirectory', 'promptToCreate'],
+  }, (fileNames) => {
+    if (fileNames === undefined) {
+      console.log('No file selected');
+    } else {
+      document.getElementById('output-folder').value = fileNames[0];
+      console.log(fileNames[0]);
+    }
+  });
+}, false);
+
+
 document.getElementById('generate-pattern').addEventListener('click', () => {
-
-
 
   const settings = {
     outputLocation: document.getElementById('output-folder').value,
