@@ -7,7 +7,7 @@ const defaultSettings = {
 };
 
 function prepImage(imagePath, settings, callback) {
-  const config = Object.assign(defaultSettings, settings);
+  const config = Object.assign(settings, defaultSettings);
 
   Jimp.read(imagePath)
     .then((image) => {
@@ -20,7 +20,10 @@ function prepImage(imagePath, settings, callback) {
         .greyscale() // set greyscale.
         .write(`${config.outputLocation}/images/processed.jpg`);
 
-      return callback(preppedImage);
+      console.log('Prep image config:');
+      console.log(config);
+
+      return callback(preppedImage, config);
     })
     .catch((err) => {
       console.error(err);

@@ -41,29 +41,58 @@ document.getElementById('select-file').addEventListener('click', () => {
 }, false);
 
 document.getElementById('generate-pattern').addEventListener('click', () => {
-  PrepImage.prepImage(document.getElementById('actual-file').value, {}, I2P.generatePattern);
+
+
+
+  const settings = {
+    outputLocation: document.getElementById('output-folder').value,
+    edgeMargin: document.getElementById('edge-margin').value,
+    pageMargin: document.getElementById('page-margin').value,
+    boxSize: document.getElementById('box-size').value,
+    darkColor: document.getElementById('dark-color-picker').value,
+    lightColor: document.getElementById('light-color-picker').value,
+    lineColor: document.getElementById('grid-color-picker').value, // Color of the grid.
+    breakColor: document.getElementById('break-color').value, // Value of light vs dark squares.
+    fillOpacity: document.getElementById('opacity-level').value, // Opacity of the boxes.
+  };
+  PrepImage.prepImage(document.getElementById('actual-file').value, settings, I2P.generatePattern);
 }, false);
 
 // Basic instantiation of color pickers:
-$('#dark-color-picker').colorpicker();
+$('#dark-color-swatch').colorpicker({
+  format: 'hex',
+  color: '#444444',
+  container: true,
+  inline: true,
+});
 
 // Example using an event, to change the color of the .jumbotron background:
-$('#dark-color-picker').on('colorpickerChange', (event) => {
-  $('.jumbotron').css('background-color', event.color.toString());
+$('#dark-color-swatch').on('colorpickerChange', (event) => {
+  $('#dark-color').val(event.color.toString());
 });
 
 // Basic instantiation of color pickers:
-$('#light-color-picker').colorpicker();
+$('#light-color-swatch').colorpicker({
+  format: 'hex',
+  color: '#FFFF22',
+  container: true,
+  inline: true,
+});
 
 // Example using an event, to change the color of the .jumbotron background:
-$('#light-color-picker').on('colorpickerChange', (event) => {
-  $('.jumbotron').css('background-color', event.color.toString());
+$('#light-color-swatch').on('colorpickerChange', (event) => {
+  $('#light-color').val(event.color.toString());
 });
 
 // Basic instantiation of color pickers:
-$('#grid-color-picker').colorpicker();
+$('#grid-color-swatch').colorpicker({
+  format: 'hex',
+  color: '#000000',
+  container: true,
+  inline: true,
+});
 
 // Example using an event, to change the color of the .jumbotron background:
-$('#grid-color-picker').on('colorpickerChange', (event) => {
-  $('.jumbotron').css('background-color', event.color.toString());
+$('#grid-color-swatch').on('colorpickerChange', (event) => {
+  $('#grid-color').val(event.color.toString());
 });
