@@ -1,6 +1,9 @@
 const electron = require('electron');
 // Module to control application life.
-const { app, BrowserWindow } = electron;
+const {
+  app,
+  BrowserWindow,
+} = electron;
 require('electron-debug')();
 const path = require('path');
 const url = require('url');
@@ -13,7 +16,10 @@ function createWindow() {
   const display = electron.screen.getPrimaryDisplay();
   console.log(display.workArea);
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: display.workArea.width, height: display.workArea.height });
+  mainWindow = new BrowserWindow({
+    width: display.workArea.width,
+    height: display.workArea.height,
+  });
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
