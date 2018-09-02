@@ -49,9 +49,9 @@ document.getElementById('generate-pattern').addEventListener('click', () => {
     edgeMargin: document.getElementById('edge-margin').value,
     pageMargin: document.getElementById('page-margin').value,
     boxSize: document.getElementById('box-size').value,
-    darkColor: document.getElementById('dark-color-picker').value,
-    lightColor: document.getElementById('light-color-picker').value,
-    lineColor: document.getElementById('grid-color-picker').value, // Color of the grid.
+    darkColor: document.getElementById('dark-color').value,
+    lightColor: document.getElementById('light-color').value,
+    lineColor: document.getElementById('grid-color').value, // Color of the grid.
     breakColor: document.getElementById('break-color').value, // Value of light vs dark squares.
     fillOpacity: document.getElementById('opacity-level').value, // Opacity of the boxes.
   };
