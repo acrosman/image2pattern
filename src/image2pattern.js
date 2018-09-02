@@ -32,6 +32,7 @@ function drawPatternPage(image, startX, startY, width, height, settings) {
 
   const draw = SVG('drawing').size(drawingWidth, drawingHeight);
 
+  // TODO: Add bold line every 10 rows and columns.
   for (let i = 0; i < height; i += 1) {
     ry = i * config.boxSize;
     currentX = startX;

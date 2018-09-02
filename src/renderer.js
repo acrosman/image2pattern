@@ -73,6 +73,8 @@ document.getElementById('generate-pattern').addEventListener('click', () => {
 }, false);
 
 // Basic instantiation of color pickers:
+// TODO: change color picker library, or similar approach to remove jQuery and
+// bootstrap dependencies at some point.
 $('#dark-color-swatch').colorpicker({
   format: 'hex',
   color: '#444444',

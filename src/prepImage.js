@@ -20,9 +20,6 @@ function prepImage(imagePath, settings, callback) {
         .greyscale() // set greyscale.
         .write(`${config.outputLocation}/images/processed.jpg`);
 
-      console.log('Prep image config:');
-      console.log(config);
-
       return callback(preppedImage, config);
     })
     .catch((err) => {
