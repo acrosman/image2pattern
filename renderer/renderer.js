@@ -1,9 +1,24 @@
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
+const { remote } = require('electron');
 const { dialog } = require('electron').remote;
-const PrepImage = require('./prepImage.js');
-const I2P = require('./image2pattern.js');
+const ColorPicker = require('electron-color-picker');
+
+const PrepImage = remote.require('./src/prepImage.js');
+const I2P = remote.require('./src/image2pattern.js');
+
+const getColor = async () => {
+  // color may be `#0099ff` or `` (pick cancelled)
+  const color = await ColorPicker.getColorHexRGB().catch((error) => {
+    console.warn('[ERROR] getColor', error);
+    return ''
+  });
+
+  console.log(`getColor: ${color}`);
+};
+
+document.getElementById('color-button').addEventListener('click', getColor);
 
 // Reroute console messages to the messages div.
 // Hat Tip: https://stackoverflow.com/a/6604660/24215

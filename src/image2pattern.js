@@ -1,7 +1,8 @@
 const fs = require('fs');
 const PdfKit = require('pdfkit');
 const Svg2Pdf = require('svg-to-pdfkit');
-const SVG = require('svgjs');
+const window = require('svgdom');
+const SVG = require('svgjs')(window);
 const thread = require('./threadColors.js');
 
 const defaultSettings = {
@@ -30,7 +31,7 @@ function drawPatternPage(image, startX, startY, width, height, settings) {
 
   console.log(`Creating image starting at ${startX}x${startY} to cover ${width}x${height}`);
 
-  const draw = SVG('drawing').size(drawingWidth, drawingHeight);
+  const draw = SVG(window.document).size(drawingWidth, drawingHeight);
 
   // TODO: Add bold line every 10 rows and columns.
   for (let i = 0; i < height; i += 1) {

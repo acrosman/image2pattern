@@ -17,7 +17,9 @@
   "dependencies": {
     "bootstrap": "^4.1.3",
     "bootstrap-colorpicker": "^3.0.3",
+    "devtron": "^1.4.0",
     "electron": "^3.0.0-nightly.20180821",
+    "electron-color-picker": "^0.1.0",
     "electron-debug": "^2.0.0",
     "eslint": "^5.5.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -30,6 +32,7 @@
     "pdfkit": "^0.8.3",
     "popper.js": "^1.14.4",
     "svg-to-pdfkit": "^0.1.7",
+    "svgdom": "0.0.15",
     "svgjs": "^2.6.2"
   },
   "devDependencies": {
