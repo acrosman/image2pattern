@@ -19,7 +19,6 @@
     "bootstrap-colorpicker": "^3.0.3",
     "devtron": "^1.4.0",
     "electron": "^3.0.0-nightly.20180821",
-    "electron-color-picker": "^0.1.0",
     "electron-debug": "^2.0.0",
     "eslint": "^5.5.0",
     "eslint-config-airbnb": "^17.1.0",
