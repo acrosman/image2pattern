@@ -77,17 +77,26 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <p><em>Monochrome controls</em></p>
-        <label for="break-color">Break point (color index to break as dark vs light)</label>
-        <input type="number" value="10000" id="break-color">
-        <label for="opacity-level">Fill Opacity</label>
-        <input type="number" value="0.3" step=0.1 max=1 min=0 id="opacity-level">
-
-        <button type="button" id="color-button">Color Test</button>
-
+        <h3>Color controls</h3>
+        <label for="color-mode-selector">Color Mode</label>
+        <select id="color-mode-selector">
+          <option value="vibrant">Full Color</option>
+          <option value="monochrome">Black and White</option>
+        </select>
+        <div id="monochrome-controls" class="control-set--monochrome">
+          <label for="break-color">Break point (color index to break as dark vs light)</label>
+          <input type="number" value="10000" id="break-color">
+          <label for="opacity-level">Fill Opacity</label>
+          <input type="number" value="0.3" step=0.1 max=1 min=0 id="opacity-level">
+          <button type="button" id="color-button">Color Test</button>
+        </div>
+        <div id="vibrant-color-controls" class="control-set--vibrant">
+          <label for="color-count-limit">Color Count</label>
+          <input type="number" value="64" max="472" min="2" id="color-count-limit">
+        </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row control-set--monochrome">
       <div class="col-md-4">
         <div>
           <label for="dark-color-swatch">Dark color</label>
@@ -123,7 +132,8 @@
 </body>
 <script>
   // You can also require other files to run in this process
-  require('./renderer/renderer.js')
+  require('./renderer/renderer.js');
+  require('./renderer/interactions.js');
 </script>
 
 </html>
