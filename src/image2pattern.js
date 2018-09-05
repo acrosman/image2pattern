@@ -4,12 +4,15 @@ const Svg2Pdf = require('svg-to-pdfkit');
 const window = require('svgdom');
 const SVG = require('svgjs')(window);
 const thread = require('./threadColors.js');
+const symbolList = require('./symbols.js');
 
 const defaultSettings = {
   outputLocation: 'outputs',
   edgeMargin: 50,
   pageMargin: 50,
   boxSize: 10,
+  colorMode: 'monochrome',
+  colorCount: 64,
   darkColor: '#444', // Dark square fill color.
   lightColor: '#FF3', // Light square fill color.
   lineColor: '#000', // Color of the grid.

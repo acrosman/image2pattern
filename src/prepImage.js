@@ -4,6 +4,8 @@ const defaultSettings = {
   maxWidth: 100,
   maxHeigh: 100,
   outputLocation: 'outputs',
+  colorMode: 'monochrome',
+  colorCount: 64,
 };
 
 function prepImage(imagePath, settings, callback) {

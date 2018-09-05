@@ -47,7 +47,8 @@
           <label for="actual-file">Select Source File</label>
           <input type="text" placeholder="Please select a file" id="actual-file" disabled="disabled" />
           <button type="button" class="btn green btn-secondary" id="select-file">Choose a file</button>
-          <button type="button" class="btn btn-primary" id="generate-pattern">Generate Pattern</button>
+          <button type="button" class="btn btn-primary" id="generate-image">Generate Image</button>
+          <button type="button" class="btn btn-primary green" id="generate-pattern" disabled >Generate Pattern</button>
         </div>
       </div>
     </div>
@@ -64,34 +65,54 @@
       </div>
       <div class="col-md-6">
         <div class="form-group">
-        <label for="edge-margin">Page edge margin</label>
-        <input type="number" value="50" max=500 min=0 id="edge-margin"></div>
+          <label for="edge-margin">Page edge margin</label>
+          <input type="number" value="50" max=500 min=0 id="edge-margin">
+        </div>
         <div class="form-group">
-        <label for="page-margin">Page top margin</label>
-        <input type="number" value="50" max=500 min=0 id="page-margin"></div>
+          <label for="page-margin">Page top margin</label>
+          <input type="number" value="50" max=500 min=0 id="page-margin">
+        </div>
         <div class="form-group">
-        <label for="box-size">Box Size</label>
-        <input type="number" value="10" max=100 min=1 id="box-size">
-      </div>
+          <label for="box-size">Box Size</label>
+          <input type="number" value="10" max=100 min=1 id="box-size">
+        </div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <h3>Color controls</h3>
-        <label for="color-mode-selector">Color Mode</label>
-        <select id="color-mode-selector">
-          <option value="vibrant">Full Color</option>
-          <option value="monochrome">Black and White</option>
-        </select>
-        <div id="monochrome-controls" class="control-set--monochrome">
-          <label for="break-color">Break point (color index to break as dark vs light)</label>
-          <input type="number" value="10000" id="break-color">
-          <label for="opacity-level">Fill Opacity</label>
-          <input type="number" value="0.3" step=0.1 max=1 min=0 id="opacity-level">
+        <h3>Images controls</h3>
+        <div id="image-controls" class="control-set--general">
+          <div class="row">
+            <div class="col-md-12">
+              <label for="image-max-width">Max Width</label>
+              <input type="number" min="10" value="150" id="image-max-width">
+              <label for="image-max-height">Max Height</label>
+              <input type="number" min="10" value="150" id="image-max-height">
+            </div>
+            <div class="col-md-12">
+              <label for="color-mode-selector">Color Mode</label>
+              <select id="color-mode-selector">
+                <option value="vibrant">Full Color</option>
+                <option value="monochrome">Black and White</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div id="vibrant-color-controls" class="control-set--vibrant">
-          <label for="color-count-limit">Color Count</label>
-          <input type="number" value="64" max="472" min="2" id="color-count-limit">
+        <div id="monochrome-controls" class="control-set--monochrome row">
+          <div class="col-md-6">
+            <h4>Monochrome pattern controls</h4>
+            <label for="break-color">Break point (color index to break as dark vs light)</label>
+            <input type="number" value="10000" id="break-color">
+            <label for="opacity-level">Fill Opacity</label>
+            <input type="number" value="0.3" step=0.1 max=1 min=0 id="opacity-level">
+          </div>
+        </div>
+        <div id="vibrant-color-controls" class="control-set--vibrant row">
+          <div class="col-md-6">
+            <h4>Full color pattern controls</h4>
+            <label for="color-count-limit">Color Count</label>
+            <input type="number" value="64" max="472" min="2" id="color-count-limit">
+          </div>
         </div>
       </div>
     </div>
