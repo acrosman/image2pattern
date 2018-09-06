@@ -4,7 +4,10 @@
   "description": "A simple app to convert an image to a cross stitch pattern.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "image-test": "node tests/image.js",
+    "gen-test": "node tests/generate.js",
+    "debug": "node tests/index.js"
   },
   "keywords": [
     "images",

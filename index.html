@@ -49,6 +49,8 @@
           <button type="button" class="btn green btn-secondary" id="select-file">Choose a file</button>
           <button type="button" class="btn btn-primary" id="generate-image">Generate Image</button>
           <button type="button" class="btn btn-primary green" id="generate-pattern" disabled >Generate Pattern</button>
+          <input type="hidden" value="" id="image-file">
+          <img src="" id="image-file-display">
         </div>
       </div>
     </div>
@@ -64,15 +66,15 @@
         <button type="button" class="btn green btn-secondary" id="select-output-folder">Choose a folder</button>
       </div>
       <div class="col-md-6">
-        <div class="form-group">
+        <div >
           <label for="edge-margin">Page edge margin</label>
           <input type="number" value="50" max=500 min=0 id="edge-margin">
         </div>
-        <div class="form-group">
+        <div >
           <label for="page-margin">Page top margin</label>
           <input type="number" value="50" max=500 min=0 id="page-margin">
         </div>
-        <div class="form-group">
+        <div >
           <label for="box-size">Box Size</label>
           <input type="number" value="10" max=100 min=1 id="box-size">
         </div>

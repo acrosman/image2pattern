@@ -3,11 +3,12 @@ const PdfKit = require('pdfkit');
 const Svg2Pdf = require('svg-to-pdfkit');
 const window = require('svgdom');
 const SVG = require('svgjs')(window);
-const thread = require('./threadColors.js');
+const Jimp = require('jimp');
+const threads = require('./threadColors.js');
 const symbolList = require('./symbols.js');
 
 const defaultSettings = {
-  outputLocation: 'outputs',
+  outputLocation: './outputs',
   edgeMargin: 50,
   pageMargin: 50,
   boxSize: 10,
@@ -71,10 +72,8 @@ function drawPatternPage(image, startX, startY, width, height, settings) {
   return draw;
 }
 
-function createPattern(image, settings) {
+function createPattern(imagePath, settings) {
   const config = Object.assign(defaultSettings, settings);
-  const height = image.getHeight();
-  const width = image.getWidth();
 
   // TODO: Add support for picking page size.
   const pdfFile = new PdfKit();
@@ -93,69 +92,75 @@ function createPattern(image, settings) {
     (pdfFile.page.height - (config.pageMargin * 2)) / config.boxSize,
   );
 
-  // We have to break the pattern into a series of pages that fit the boxes
-  // for the mapped image.
-  const pagesWide = Math.ceil(width / pageBoxCountWidth);
-  const pagesTall = Math.ceil(height / pageBoxCountHeight);
-  const totalPages = pagesTall * pagesWide;
+  Jimp.read(imagePath)
+    .then((image) => {
+      // We have to break the pattern into a series of pages that fit the boxes
+      // for the mapped image.
+      const width = image.getWidth();
+      const height = image.getHeight();
+      const pagesWide = Math.ceil(width / pageBoxCountWidth);
+      const pagesTall = Math.ceil(height / pageBoxCountHeight);
+      const totalPages = pagesTall * pagesWide;
 
-  pdfFile.text(`This image is ${width} x ${height}.`);
-  pdfFile.text(`Each page can hold ${pageBoxCountWidth} boxes across and ${pageBoxCountHeight} down.`);
-  pdfFile.text(`So this file is ${pagesWide} pages wide and ${pagesTall} pages tall.`);
+      pdfFile.text(`This image is ${width} x ${height}.`);
+      pdfFile.text(`Each page can hold ${pageBoxCountWidth} boxes across and ${pageBoxCountHeight} down.`);
+      pdfFile.text(`So this file is ${pagesWide} pages wide and ${pagesTall} pages tall.`);
 
-  let pageHeight; let pageWidth;
-  let pageStartX = 0;
-  let pageStartY = 0;
-  let page = 1;
+      let pageHeight; let pageWidth; let pageSvg;
+      let pageStartX = 0;
+      let pageStartY = 0;
+      let page = 1;
 
-  let pageSvg;
-
-  while (page <= totalPages) {
-    if (pageStartX >= width) {
-      pageStartX = 0;
-      pageStartY += pageHeight;
-    }
-
-    // Set the pixal range for this page.
-    pageHeight = Math.min(pageBoxCountHeight, height - pageStartY);
-    pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
-
-    // Create an image for just this page.
-    pageSvg = drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config);
-
-    console.log(`================ Page break ${page} ================`);
-
-    // TODO: stream pages to disk.
-    pdfFile.addPage({
-      margins: {
-        top: config.pageMargin,
-        bottom: config.pageMargin,
-        left: config.edgeMargin,
-        right: config.edgeMargin,
-      },
-    }).text(`Page: ${page}.  ${pageWidth} X ${pageHeight} starting ${pageStartX} x ${pageStartY} box size ${config.boxSize}`, 50, 20);
-
-    const imageFilePath = `${config.outputLocation}/images/page-${page}.svg`;
-    fs.writeFile(
-      imageFilePath,
-      pageSvg.svg(),
-      (err) => {
-        if (err) {
-          return console.log(err);
+      while (page <= totalPages) {
+        if (pageStartX >= width) {
+          pageStartX = 0;
+          pageStartY += pageHeight;
         }
-        console.log(`${imageFilePath} saved!`);
-        return err;
-      },
-    );
 
-    Svg2Pdf(pdfFile, pageSvg.svg(), config.edgeMargin, config.pageMargin);
+        // Set the pixal range for this page.
+        pageHeight = Math.min(pageBoxCountHeight, height - pageStartY);
+        pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
 
-    // Carry the current X position over as the start of the next page.
-    pageStartX += pageWidth;
-    page += 1;
-  }
+        // Create an image for just this page.
+        pageSvg = drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config);
 
-  pdfFile.end();
+        console.log(`================ Page break ${page} ================`);
+
+        // TODO: stream pages to disk.
+        pdfFile.addPage({
+          margins: {
+            top: config.pageMargin,
+            bottom: config.pageMargin,
+            left: config.edgeMargin,
+            right: config.edgeMargin,
+          },
+        }).text(`Page: ${page}.  ${pageWidth} X ${pageHeight} starting ${pageStartX} x ${pageStartY} box size ${config.boxSize}`, 50, 20);
+
+        const imageFilePath = `${config.outputLocation}/images/page-${page}.svg`;
+        fs.writeFile(
+          imageFilePath,
+          pageSvg.svg(),
+          (err) => {
+            if (err) {
+              return console.log(err);
+            }
+            console.log(`${imageFilePath} saved!`);
+            return err;
+          },
+        );
+
+        Svg2Pdf(pdfFile, pageSvg.svg(), config.edgeMargin, config.pageMargin);
+
+        // Carry the current X position over as the start of the next page.
+        pageStartX += pageWidth;
+        page += 1;
+      }
+
+      pdfFile.end();
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 }
 
 exports.generatePattern = createPattern;
