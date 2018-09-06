@@ -4,6 +4,7 @@ const Svg2Pdf = require('svg-to-pdfkit');
 const window = require('svgdom');
 const SVG = require('svgjs')(window);
 const Jimp = require('jimp');
+const Vibrant = require('node-vibrant');
 const threads = require('./threadColors.js');
 const symbolList = require('./symbols.js');
 
