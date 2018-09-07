@@ -1,5 +1,7 @@
 const Jimp = require('jimp');
 
+// TODO: Trim White space from edges
+
 const defaultSettings = {
   imgMaxWidth: 100,
   imgMaxHeight: 100,
@@ -20,18 +22,18 @@ function vibrantProcess(image, outputPath, settings) {
   image
     .scaleToFit(settings.imgMaxWidth, settings.imgMaxHeight) // Scale to fit the limits.
     .write(outputPath);
-
 }
 
 function prepImage(imagePath, settings, callback) {
   const config = Object.assign(defaultSettings, settings);
+  const filePath = `${config.outputLocation}/images/${imagePath}`;
+  // JIMP is picky about types, so make sure the sizes are integers.
+  config.imgMaxHeight *= 1;
+  config.imgMaxWidth *= 1;
   console.log(config);
-  const filePath = `${config.outputLocation}/images/processed.jpg`;
+
   Jimp.read(imagePath)
     .then((image) => {
-      // TODO: Handle more than monochrome patterns
-      // TODO: Trim White space from edges
-      // TODO: Make image processing more variable.
       if (config.colorMode === 'monochrome') {
         monochromeProcess(image, filePath, config);
       } else {

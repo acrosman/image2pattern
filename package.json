@@ -7,7 +7,8 @@
     "start": "electron .",
     "image-test": "node tests/image.js",
     "gen-test": "node tests/generate.js",
-    "debug": "node tests/index.js"
+    "simple-debug": "node tests/index.js",
+    "debug": "electron --inspect=5858 ."
   },
   "keywords": [
     "images",

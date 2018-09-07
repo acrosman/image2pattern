@@ -14,9 +14,9 @@ const settings = {
   imgMaxHeight: 200,
   colorMode: 'monochrome',
   colorCount: 64,
-  darkColor: '#555', // Dark square fill color.
-  lightColor: '#F33', // Light square fill color.
-  lineColor: '#111', // Color of the grid.
+  darkColor: '#222', // Dark square fill color.
+  lightColor: '#FF3', // Light square fill color.
+  lineColor: '#000', // Color of the grid.
   breakColor: '11000', // Value of light vs dark squares.
   fillOpacity: '0.4', // Opacity of the boxes.
 };
