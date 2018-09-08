@@ -27,6 +27,7 @@ function vibrantProcess(image, outputPath, settings) {
 function prepImage(imagePath, settings, callback) {
   const config = Object.assign(defaultSettings, settings);
   const filePath = `${config.outputLocation}/images/${imagePath}`;
+
   // JIMP is picky about types, so make sure the sizes are integers.
   config.imgMaxHeight *= 1;
   config.imgMaxWidth *= 1;
