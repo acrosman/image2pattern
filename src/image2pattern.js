@@ -163,17 +163,14 @@ function createPattern(imagePath, settings) {
 
   Jimp.read(imagePath)
     .then((image) => {
-
       if (config.colorMode === 'monochrome') {
         patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, {}, config);
       } else {
         Vibrant.from(imagePath).getPalette()
-          .then(palette => {
+          .then((palette) => {
             patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, palette, config);
           });
       }
-
-
     })
     .catch((err) => {
       console.error(err);
