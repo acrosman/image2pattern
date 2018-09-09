@@ -40,7 +40,7 @@ function prepImage(imagePath, settings, callback) {
       } else {
         vibrantProcess(image, filePath, config);
       }
-      return callback(filePath);
+      return callback(filePath, config);
     })
     .catch((err) => {
       console.error(err);

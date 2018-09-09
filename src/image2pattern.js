@@ -138,7 +138,6 @@ function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, palle
   }
 
   pdfFile.end();
-
 }
 
 function createPattern(imagePath, settings) {
