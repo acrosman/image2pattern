@@ -1,5 +1,7 @@
 const Jimp = require('jimp');
 const Vibrant = require('node-vibrant');
+const window = require('svgdom');
+const SVG = require('svgjs')(window);
 
 const defaultSettings = {
   imgMaxWidth: 100,
@@ -16,7 +18,7 @@ async function vibrantProcess(image, outputPath, settings) {
     .write(outputPath);
 }
 
-function Process(image, outputPath, settings) {
+function generateSvg(image, outputPath, settings) {
   if (settings.colorMode === 'monochrome') {
     image
       .scaleToFit(settings.imgMaxWidth, settings.imgMaxHeight) // Scale to fit the limits.
@@ -26,6 +28,24 @@ function Process(image, outputPath, settings) {
   } else {
     vibrantProcess(image, outputPath, settings);
   }
+
+  // Convert the file to an SVG with just a bit map of the image.
+  const newImage = SVG(window.document);
+
+  image.scan(0, 0, image.bitmap.width, image.bitmap.height, (x, y, idx) => {
+    // Get the color we need, drop any alpha.
+    const red = image.bitmap.data[idx + 0];
+    const green = image.bitmap.data[idx + 1];
+    const blue = image.bitmap.data[idx + 2];
+
+    newImage.rect(1, 1).attr({
+      x,
+      y,
+      stroke: `rgb(${red}, ${green}, ${blue})`,
+    }).addClass(`col-${x}`).addClass(`row-${y}`);
+  });
+
+  return newImage;
 }
 
 async function prepImage(imagePath, settings, callback) {
@@ -42,7 +62,7 @@ async function prepImage(imagePath, settings, callback) {
 
   try {
     const image = await Jimp.read(imagePath);
-    const svgFile = await Process(image, filePath, config);
+    const svgFile = await generateSvg(image, filePath, config);
     callback(svgFile);
   } catch (err) {
     console.log(err);
