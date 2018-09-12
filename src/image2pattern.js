@@ -4,7 +4,6 @@ const Svg2Pdf = require('svg-to-pdfkit');
 const window = require('svgdom');
 const SVG = require('svgjs')(window);
 const Jimp = require('jimp');
-const Vibrant = require('node-vibrant');
 const threads = require('./threadColors.js');
 const symbolList = require('./symbols.js');
 
@@ -39,6 +38,7 @@ function drawPatternPage(image, startX, startY, width, height, settings) {
   const draw = SVG(window.document).size(drawingWidth, drawingHeight);
 
   // TODO: Add bold line every 10 rows and columns.
+  // TODO: Add process.nextTick support.
   for (let i = 0; i < height; i += 1) {
     ry = i * config.boxSize;
     currentX = startX;
@@ -73,7 +73,7 @@ function drawPatternPage(image, startX, startY, width, height, settings) {
   return draw;
 }
 
-function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, pallete, config) {
+function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, config) {
   // We have to break the pattern into a series of pages that fit the boxes
   // for the mapped image.
   const width = image.getWidth();
@@ -85,7 +85,6 @@ function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, palle
   pdfFile.text(`This image is ${width} x ${height}.`);
   pdfFile.text(`Each page can hold ${pageBoxCountWidth} boxes across and ${pageBoxCountHeight} down.`);
   pdfFile.text(`So this file is ${pagesWide} pages wide and ${pagesTall} pages tall.`);
-
 
   let pageHeight; let pageWidth; let pageSvg;
   let pageStartX = 0;
@@ -162,14 +161,7 @@ function createPattern(imagePath, settings) {
 
   Jimp.read(imagePath)
     .then((image) => {
-      if (config.colorMode === 'monochrome') {
-        patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, {}, config);
-      } else {
-        Vibrant.from(imagePath).getPalette()
-          .then((palette) => {
-            patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, palette, config);
-          });
-      }
+      patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, config);
     })
     .catch((err) => {
       console.error(err);

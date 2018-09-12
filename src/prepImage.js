@@ -1,6 +1,5 @@
 const Jimp = require('jimp');
-
-// TODO: Trim White space from edges
+const Vibrant = require('node-vibrant');
 
 const defaultSettings = {
   imgMaxWidth: 100,
@@ -10,41 +9,44 @@ const defaultSettings = {
   colorCount: 64,
 };
 
-function monochromeProcess(image, outputPath, settings) {
-  image
-    .scaleToFit(settings.imgMaxWidth, settings.imgMaxHeight) // Scale to fit the limits.
-    .contrast(1) // Max out the contrast.
-    .greyscale() // set greyscale.
-    .write(outputPath);
-}
-
-function vibrantProcess(image, outputPath, settings) {
+async function vibrantProcess(image, outputPath, settings) {
+  // TODO: all the actual vibrant related "stuff".
   image
     .scaleToFit(settings.imgMaxWidth, settings.imgMaxHeight) // Scale to fit the limits.
     .write(outputPath);
 }
 
-function prepImage(imagePath, settings, callback) {
+function Process(image, outputPath, settings) {
+  if (settings.colorMode === 'monochrome') {
+    image
+      .scaleToFit(settings.imgMaxWidth, settings.imgMaxHeight) // Scale to fit the limits.
+      .contrast(1) // Max out the contrast.
+      .greyscale() // set greyscale.
+      .write(outputPath);
+  } else {
+    vibrantProcess(image, outputPath, settings);
+  }
+}
+
+async function prepImage(imagePath, settings, callback) {
   const config = Object.assign(defaultSettings, settings);
   const filePath = `${config.outputLocation}/images/${imagePath}`;
+
+  // TODO: Trim White space from edges.
+  // TODO: Consider Potrace https://www.npmjs.com/package/potrace (GPL)
 
   // JIMP is picky about types, so make sure the sizes are integers.
   config.imgMaxHeight *= 1;
   config.imgMaxWidth *= 1;
   console.log(config);
 
-  Jimp.read(imagePath)
-    .then((image) => {
-      if (config.colorMode === 'monochrome') {
-        monochromeProcess(image, filePath, config);
-      } else {
-        vibrantProcess(image, filePath, config);
-      }
-      return callback(filePath, config);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  try {
+    const image = await Jimp.read(imagePath);
+    const svgFile = await Process(image, filePath, config);
+    callback(svgFile);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 exports.prepImage = prepImage;
