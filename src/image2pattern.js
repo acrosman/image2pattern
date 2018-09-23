@@ -162,7 +162,6 @@ function createPattern(imagePath, settings) {
     (pdfFile.page.height - (config.pageMargin * 2)) / config.boxSize,
   );
 
-  // TODO: Replace Jimp with loading the SVG again.
   Jimp.read(imagePath)
     .then((image) => {
       patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, config);

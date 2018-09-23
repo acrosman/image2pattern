@@ -35,8 +35,9 @@ function loadSettings() {
   };
 }
 
-function showGeneratedImage(svgFile) {
-  document.getElementById('image-svg-wrapper').innerHTML = svgFile.svg();
+function showGeneratedImage(filePath) {
+  document.getElementById('image-file').value = filePath;
+  document.getElementById('image-file-display').src = filePath;
   document.getElementById('generate-pattern').removeAttribute('disabled');
 }
 
