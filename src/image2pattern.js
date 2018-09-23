@@ -92,9 +92,6 @@ function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, confi
   let page = 1;
 
   while (page <= totalPages) {
-
-    console.log(`Page: ${page} of ${totalPages}`);
-
     if (pageStartX >= width) {
       pageStartX = 0;
       pageStartY += pageHeight;
@@ -105,7 +102,7 @@ function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, confi
     pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
 
     // Create an image for just this page.
-    pageSvg = process.nextTick(drawPatternPage, image, pageStartX, pageStartY, pageWidth, pageHeight, config);
+    pageSvg = drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config);
 
     console.log(`================ Page break ${page} ================`);
 
