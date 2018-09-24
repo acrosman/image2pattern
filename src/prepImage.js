@@ -42,8 +42,8 @@ async function prepImage(imagePath, settings, callback) {
 
   try {
     const image = await Jimp.read(imagePath);
-    const svgFile = await Process(image, filePath, config);
-    callback(svgFile);
+    Process(image, filePath, config);
+    callback(filePath);
   } catch (err) {
     console.log(err);
   }

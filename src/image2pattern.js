@@ -21,59 +21,59 @@ const defaultSettings = {
   fillOpacity: '0.3', // Opacity of the boxes.
 };
 
-function drawPatternPage(image, startX, startY, width, height, settings) {
+async function drawPatternPage(image, startX, startY, width, height, settings) {
   const config = Object.assign(defaultSettings, settings);
 
   // TODO: allow these to be inputs.
   const drawingWidth = config.boxSize * width;
   const drawingHeight = config.boxSize * height;
 
-  let rx; let ry; let pixColor;
-  let currentX = startX;
-  let currentY = startY;
+  let rx; let ry;
   let currentColor = config.lightColor;
 
   console.log(`Creating image starting at ${startX}x${startY} to cover ${width}x${height}`);
 
   const draw = SVG(window.document).size(drawingWidth, drawingHeight);
 
-  // TODO: Add bold line every 10 rows and columns.
-  // TODO: Add process.nextTick support.
-  for (let i = 0; i < height; i += 1) {
-    ry = i * config.boxSize;
-    currentX = startX;
-
-    // console.log(`Starting row: ${i}`);
-
-    for (let j = 0; j < width; j += 1) {
-      // Get the current pixal color and map to box background.
-      pixColor = image.getPixelColor(currentX, currentY);
-      // TODO: Handle more than monochrome patterns.
-      // let side = '';
-      if (pixColor < config.breakColor) {
-        currentColor = config.darkColor;
-        // side = 'dark';
-      } else {
-        currentColor = config.lightColor;
-        // side = 'light';
-      }
-      // Determine the location of this box, and draw.
-      rx = j * config.boxSize;
-      draw.rect(config.boxSize, config.boxSize)
-        .move(rx, ry)
-        .fill(currentColor)
-        .stroke(config.lineColor)
-        .opacity(config.fillOpacity);
-      // console.log(`Pixel ${currentX}x${currentY}: printed at: ${rx}x${ry} as ${side}`);
-      currentX += 1;
+  image.scan(startX, startY, width, height, (x, y, idx) => {
+    // TODO: Add bold line every 10 rows and columns.
+    // let side = 'Yoda';
+    if (idx < config.breakColor) {
+      currentColor = config.darkColor;
+      // side = 'dark';
+    } else {
+      currentColor = config.lightColor;
+      // side = 'light';
     }
-    currentY += 1;
-  }
+    // Determine the location of this box, and draw.
+    rx = (x - startX) * config.boxSize;
+    ry = (y - startY) * config.boxSize;
+    draw.rect(config.boxSize, config.boxSize)
+      .move(rx, ry)
+      .fill(currentColor)
+      .stroke(config.lineColor)
+      .opacity(config.fillOpacity);
+    // console.log(`Pixel ${x}x${y}: printed at: ${rx}x${ry} as ${side}`);
+  });
+
+  // DEBUG: Only needed for debugging. Remove once complete.
+  const imageFilePath = `${config.outputLocation}/images/page-${startX}x${startY}.svg`;
+  fs.writeFile(
+    imageFilePath,
+    draw.svg(),
+    (err) => {
+      if (err) {
+        return console.log(err);
+      }
+      console.log(`${imageFilePath} saved!`);
+      return err;
+    },
+  );
 
   return draw;
 }
 
-function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, config) {
+async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, config) {
   // We have to break the pattern into a series of pages that fit the boxes
   // for the mapped image.
   const width = image.getWidth();
@@ -86,10 +86,13 @@ function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, confi
   pdfFile.text(`Each page can hold ${pageBoxCountWidth} boxes across and ${pageBoxCountHeight} down.`);
   pdfFile.text(`So this file is ${pagesWide} pages wide and ${pagesTall} pages tall.`);
 
-  let pageHeight; let pageWidth; let pageSvg;
+  let pageHeight;
+  let pageWidth;
   let pageStartX = 0;
   let pageStartY = 0;
   let page = 1;
+  let pages = [];
+  let draw = {};
 
   while (page <= totalPages) {
     if (pageStartX >= width) {
@@ -101,11 +104,19 @@ function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, confi
     pageHeight = Math.min(pageBoxCountHeight, height - pageStartY);
     pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
 
-    // Create an image for just this page.
-    pageSvg = drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config);
+    pages.push(drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config));
+    // Carry the current X position over as the start of the next page.
+    pageStartX += pageWidth;
+    page += 1;
+  }
+  try {
+    pages = await Promise.all(pages);
+  } catch (err) {
+    console.log(err);
+    process.exit(1);
+  }
 
-    console.log(`================ Page break ${page} ================`);
-
+  for (let i = 0; i < pages.length; i += 1) {
     // TODO: stream pages to disk.
     pdfFile.addPage({
       margins: {
@@ -114,26 +125,11 @@ function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, confi
         left: config.edgeMargin,
         right: config.edgeMargin,
       },
-    }).text(`Page: ${page}.  ${pageWidth} X ${pageHeight} starting ${pageStartX} x ${pageStartY} box size ${config.boxSize}`, 50, 20);
+    }).text(`Page: ${i + 1} of ${pages.length}. File: ${pages[i]}`, 50, 20);
 
-    const imageFilePath = `${config.outputLocation}/images/page-${page}.svg`;
-    fs.writeFile(
-      imageFilePath,
-      pageSvg.svg(),
-      (err) => {
-        if (err) {
-          return console.log(err);
-        }
-        console.log(`${imageFilePath} saved!`);
-        return err;
-      },
-    );
-
-    Svg2Pdf(pdfFile, pageSvg.svg(), config.edgeMargin, config.pageMargin);
-
-    // Carry the current X position over as the start of the next page.
-    pageStartX += pageWidth;
-    page += 1;
+    // draw = SVG(window.document);
+    // draw.svg(pages[i]);
+    Svg2Pdf(pdfFile, pages[i].svg(), config.edgeMargin, config.pageMargin);
   }
 
   pdfFile.end();
