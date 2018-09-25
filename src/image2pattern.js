@@ -39,7 +39,7 @@ async function drawPatternPage(image, startX, startY, width, height, settings) {
   image.scan(startX, startY, width, height, (x, y, idx) => {
     // TODO: Add bold line every 10 rows and columns.
     // let side = 'Yoda';
-    if (idx < config.breakColor) {
+    if (image.getPixelColor(x, y) < config.breakColor) {
       currentColor = config.darkColor;
       // side = 'dark';
     } else {
@@ -128,8 +128,6 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
       },
     }).text(`Page: ${i + 1} of ${pages.length}. File: ${pages[i]}`, 50, 20);
 
-    // draw = SVG(window.document);
-    // draw.svg(pages[i]);
     Svg2Pdf(pdfFile, pages[i].svg(), config.edgeMargin, config.pageMargin);
   }
 
