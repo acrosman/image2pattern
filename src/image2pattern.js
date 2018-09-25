@@ -19,6 +19,7 @@ const defaultSettings = {
   lineColor: '#000', // Color of the grid.
   breakColor: '10000', // Value of light vs dark squares.
   fillOpacity: '0.3', // Opacity of the boxes.
+  saveSvgFiles: true, // Save the SVG files used for PDF content.
 };
 
 async function drawPatternPage(image, startX, startY, width, height, settings) {
@@ -56,19 +57,20 @@ async function drawPatternPage(image, startX, startY, width, height, settings) {
     // console.log(`Pixel ${x}x${y}: printed at: ${rx}x${ry} as ${side}`);
   });
 
-  // DEBUG: Only needed for debugging. Remove once complete.
-  const imageFilePath = `${config.outputLocation}/images/page-${startX}x${startY}.svg`;
-  fs.writeFile(
-    imageFilePath,
-    draw.svg(),
-    (err) => {
-      if (err) {
-        return console.log(err);
-      }
-      console.log(`${imageFilePath} saved!`);
-      return err;
-    },
-  );
+  if (config.saveSvgFiles) {
+    const imageFilePath = `${config.outputLocation}/images/page-${startX}x${startY}.svg`;
+    fs.writeFile(
+      imageFilePath,
+      draw.svg(),
+      (err) => {
+        if (err) {
+          return console.log(err);
+        }
+        console.log(`${imageFilePath} saved!`);
+        return err;
+      },
+    );
+  }
 
   return draw;
 }
@@ -92,7 +94,6 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
   let pageStartY = 0;
   let page = 1;
   let pages = [];
-  let draw = {};
 
   while (page <= totalPages) {
     if (pageStartX >= width) {
