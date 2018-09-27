@@ -36,9 +36,11 @@ async function drawPatternPage(image, startX, startY, width, height, settings) {
 
   const draw = SVG(window.document).size(drawingWidth, drawingHeight);
 
-  image.scan(startX, startY, width, height, (x, y, idx) => {
+  image.scan(startX, startY, width, height, (x, y) => {
     // TODO: Add bold line every 10 rows and columns.
-    // let side = 'Yoda';
+    // TODO: Add color support.
+    // TODO: Replace with solution that assumes it should use the pixel color's
+    //       closest thread match.
     if (image.getPixelColor(x, y) < config.breakColor) {
       currentColor = config.darkColor;
       // side = 'dark';

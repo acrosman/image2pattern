@@ -3,8 +3,8 @@
 const PrepImage = require('../src/prepImage.js');
 const I2P = require('../src/image2pattern.js');
 
-const bwImagePath = 'sample.png';
-// const colorImagePath = 'sample-color.png';
+const bwImagePath = 'AHC_2110.jpg';
+// const colorImagePath = 'AHC_4958.png';
 
 const settings = {
   outputLocation: 'outputs',
