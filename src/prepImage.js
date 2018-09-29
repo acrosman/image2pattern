@@ -8,8 +8,8 @@ const defaultSettings = {
   outputLocation: './outputs',
   colorMode: 'monochrome',
   colorCount: 64,
-  darkColor: '#444', // Dark square fill color.
-  lightColor: '#FF3', // Light square fill color.
+  darkColor: 0x444444, // Dark square fill color.
+  lightColor: 0xFFFF33, // Light square fill color.
 };
 
 async function vibrantProcess(image, outputPath, settings) {
