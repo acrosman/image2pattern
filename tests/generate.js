@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
+const path = require('path');
 const PrepImage = require('../src/prepImage.js');
 const I2P = require('../src/image2pattern.js');
-const path = require('path');
 
 const bwImagePath = 'sample.png';
 // const colorImagePath = 'AHC_4958.png';
