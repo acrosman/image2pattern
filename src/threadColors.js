@@ -8,9 +8,9 @@ const DMC = require('./colors.json');
 // to ease the handling of the thread list.
 // TODO: Try to replace with a use of ColorUtils.closestColor().
 function closestThreadColor(rgb) {
-  const lab = Vibrant.Util.rgbToCIELab(rgb);
+  const lab = Vibrant.Util.rgbToCIELab(rgb.r, rgb.g, rgb.b);
   let closest = {};
-  let distance = 100;
+  let distance = 0;
   let testDist = -1;
   for (let i = 0; i < DMC.length; i += 1) {
     testDist = Vibrant.Util.deltaE94(lab, DMC[i].lab);

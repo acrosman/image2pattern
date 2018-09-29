@@ -473,56 +473,24 @@ const DMC = [
   ['3895', 'Medium Dark Beaver Gray', '#878471'],
 ];
 
-function hexToRgb(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16),
-  } : null;
-}
-
-function rgb2Lab(rgb) {
-  let r = rgb.r / 255;
-  let g = rgb.g / 255;
-  let b = rgb.b / 255;
-  let x; let y; let z;
-
-  r = (r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
-  g = (g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
-  b = (b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
-
-  x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
-  y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
-  z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
-
-  x = (x > 0.008856) ? Math.pow(x, 1 / 3) : (7.787 * x) + 16 / 116;
-  y = (y > 0.008856) ? Math.pow(y, 1 / 3) : (7.787 * y) + 16 / 116;
-  z = (z > 0.008856) ? Math.pow(z, 1 / 3) : (7.787 * z) + 16 / 116;
-
-  return {
-    L: (116 * y) - 16,
-    a: 500 * (x - y),
-    b: 200 * (y - z),
-  };
-}
+const fs = require('fs');
+const Vibrant = require('node-vibrant');
+const cutils = require('../src/colorUtils.js');
 
 const restructured = [];
 let rgb = {};
 for (let i = 0; i < DMC.length; i += 1) {
-  rgb = hexToRgb(DMC[i][2]);
+  rgb = cutils.hex2Rgb(DMC[i][2]);
   restructured[i] = {
     'DMC': DMC[i][0],
     Name: DMC[i][1],
     Hex: DMC[i][2],
     'RGB': rgb,
-    'lab': rgb2Lab(rgb),
+    lab: Vibrant.Util.rgbToCIELab(rgb.r, rgb.g, rgb.b),
   };
 }
 
-const fs = require('fs');
-
-fs.writeFile('../src/colors.json', JSON.stringify(restructured), (err) => {
+fs.writeFile('./src/colors.json', JSON.stringify(restructured), (err) => {
   if (err) {
     console.error(err);
     return;

@@ -21,7 +21,7 @@ const settings = {
   lineColor: '#111111', // Color of the grid.
   breakColor: '11000', // Value of light vs dark squares.
   fillOpacity: '0.4', // Opacity of the boxes.
-  saveSvgFiles: false, // Save the SVG files used for PDF content.
+  saveSvgFiles: true, // Save the SVG files used for PDF content.
 };
 
 // console.log('Running Monochrome generation test');
