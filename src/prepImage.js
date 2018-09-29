@@ -57,7 +57,7 @@ async function prepImage(imagePath, settings, callback) {
     if (settings.colorMode === 'monochrome') {
       MonochromeProcess(image, filePath, config);
     } else {
-      colorProcess(image, filePath, settings);
+      colorProcess(image, filePath, config);
     }
     callback(filePath);
   } catch (err) {
