@@ -25,7 +25,6 @@ const defaultSettings = {
 async function drawPatternPage(image, startX, startY, width, height, settings) {
   const config = Object.assign(defaultSettings, settings);
 
-  // TODO: allow these to be inputs.
   const drawingWidth = config.boxSize * width;
   const drawingHeight = config.boxSize * height;
 
@@ -114,23 +113,29 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
   }
   try {
     pages = await Promise.all(pages);
+    console.log('Done generating page images');
   } catch (err) {
     console.log(err);
     process.exit(1);
   }
 
   for (let i = 0; i < pages.length; i += 1) {
-    // TODO: stream pages to disk.
-    pdfFile.addPage({
-      margins: {
-        top: config.pageMargin,
-        bottom: config.pageMargin,
-        left: config.edgeMargin,
-        right: config.edgeMargin,
-      },
-    }).text(`Page: ${i + 1} of ${pages.length}. File: ${pages[i]}`, 50, 20);
+    process.nextTick(
+      () => {
+        pdfFile.addPage({
+          margins: {
+            top: config.pageMargin,
+            bottom: config.pageMargin,
+            left: config.edgeMargin,
+            right: config.edgeMargin,
+          },
+        }).text(`Page: ${i + 1} of ${pages.length}. File: ${pages[i]}`, 50, 20);
 
-    Svg2Pdf(pdfFile, pages[i].svg(), config.edgeMargin, config.pageMargin);
+        Svg2Pdf(pdfFile, pages[i].svg(), config.edgeMargin, config.pageMargin);
+        console.log(`Page ${i} generated`);
+        pages[i] = null;
+      }
+    );
   }
 
   pdfFile.end();
