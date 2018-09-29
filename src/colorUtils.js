@@ -52,9 +52,16 @@ function closestColor(labColor, labColorList) {
   return closest;
 }
 
+// Convert int color to css hex without Alpha channel.
+function int2CssHex(intColor) {
+  const hexString = `#${intColor.toString(16).toUpperCase()}`;
+  return hexString.slice(0, -2);
+}
+
 exports.cssHex2JimpInt = cssHex2JimpInt;
 exports.rgb2Hex = rgb2Hex;
 exports.component2Hex = component2Hex;
 exports.hex2Rgb = hexToRgb;
 exports.colorDistance = colorDistance;
 exports.closestColor = closestColor;
+exports.int2CssHex = int2CssHex;

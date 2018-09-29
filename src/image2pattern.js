@@ -4,6 +4,7 @@ const Svg2Pdf = require('svg-to-pdfkit');
 const window = require('svgdom');
 const SVG = require('svgjs')(window);
 const Jimp = require('jimp');
+const ColorUtils = require('./colorUtils.js');
 const threads = require('./threadColors.js');
 const symbolList = require('./symbols.js');
 
@@ -40,13 +41,7 @@ async function drawPatternPage(image, startX, startY, width, height, settings) {
     // TODO: Add color support.
     // TODO: Replace with solution that assumes it should use the pixel color's
     //       closest thread match.
-    if (image.getPixelColor(x, y) < config.breakColor) {
-      currentColor = config.darkColor;
-      // side = 'dark';
-    } else {
-      currentColor = config.lightColor;
-      // side = 'light';
-    }
+    currentColor = ColorUtils.int2CssHex(image.getPixelColor(x, y));
     // Determine the location of this box, and draw.
     rx = (x - startX) * config.boxSize;
     ry = (y - startY) * config.boxSize;
