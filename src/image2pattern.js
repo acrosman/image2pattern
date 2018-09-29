@@ -23,7 +23,7 @@ const defaultSettings = {
   saveSvgFiles: true, // Save the SVG files used for PDF content.
 };
 
-async function drawPatternPage(image, startX, startY, width, height, settings) {
+async function drawPatternPage(image, startX, startY, width, height, settings, colorIndex) {
   const config = Object.assign(defaultSettings, settings);
 
   const drawingWidth = config.boxSize * width;
@@ -40,7 +40,11 @@ async function drawPatternPage(image, startX, startY, width, height, settings) {
     // TODO: Add bold line every 10 rows and columns.
     currentColor = ColorUtils.int2CssHex(image.getPixelColor(x, y));
     if (settings.colorMode !== 'monochrome') {
-      currentColor = threads.closestThreadColor(ColorUtils.hex2Rgb(currentColor));
+      const thread = threads.closestThreadColor(ColorUtils.hex2Rgb(currentColor));
+      if (!colorIndex.hasOwnProperty(thread.DMC)) {
+        colorIndex[thread.DMC] = thread;
+      }
+      currentColor = thread.Hex;
     }
     // Determine the location of this box, and draw.
     rx = (x - startX) * config.boxSize;
@@ -79,6 +83,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
   const pagesWide = Math.ceil(width / pageBoxCountWidth);
   const pagesTall = Math.ceil(height / pageBoxCountHeight);
   const totalPages = pagesTall * pagesWide;
+  const colorIndex = { colors: [] };
 
   pdfFile.text(`This image is ${width} x ${height}.`);
   pdfFile.text(`Each page can hold ${pageBoxCountWidth} boxes across and ${pageBoxCountHeight} down.`);
@@ -99,7 +104,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     // Set the pixal range for this page.
     pageHeight = Math.min(pageBoxCountHeight, height - pageStartY);
     pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
-    promisedPage = drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config);
+    promisedPage = drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config, colorIndex);
     promisedPage.pageNumber = page;
     pages.push(promisedPage);
     // Carry the current X position over as the start of the next page.

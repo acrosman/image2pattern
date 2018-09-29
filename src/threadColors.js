@@ -10,7 +10,7 @@ const DMC = require('./colors.json');
 function closestThreadColor(rgb) {
   const lab = Vibrant.Util.rgbToCIELab(rgb.r, rgb.g, rgb.b);
   let closest = {};
-  let distance = 0;
+  let distance = 100;
   let testDist = -1;
   for (let i = 0; i < DMC.length; i += 1) {
     testDist = Vibrant.Util.deltaE94(lab, DMC[i].lab);
