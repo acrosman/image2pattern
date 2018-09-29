@@ -89,12 +89,11 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
   pdfFile.text(`Each page can hold ${pageBoxCountWidth} boxes across and ${pageBoxCountHeight} down.`);
   pdfFile.text(`So this file is ${pagesWide} pages wide and ${pagesTall} pages tall.`);
 
-  let pageHeight;
-  let pageWidth;
+  let pageHeight; let pageWidth;
   let pageStartX = 0;
   let pageStartY = 0;
-  let page = 1;
-  let pages = [];
+  let page = 1; let pages = [];
+  let promisedPage;
 
   while (page <= totalPages) {
     if (pageStartX >= width) {
@@ -105,8 +104,9 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     // Set the pixal range for this page.
     pageHeight = Math.min(pageBoxCountHeight, height - pageStartY);
     pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
-
-    pages.push(drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config));
+    promisedPage = drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config);
+    promisedPage.pageNumber = page;
+    pages.push(promisedPage);
     // Carry the current X position over as the start of the next page.
     pageStartX += pageWidth;
     page += 1;
@@ -119,26 +119,33 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     process.exit(1);
   }
 
-  for (let i = 0; i < pages.length; i += 1) {
-    process.nextTick(
-      () => {
-        pdfFile.addPage({
-          margins: {
-            top: config.pageMargin,
-            bottom: config.pageMargin,
-            left: config.edgeMargin,
-            right: config.edgeMargin,
-          },
-        }).text(`Page: ${i + 1} of ${pages.length}. File: ${pages[i]}`, 50, 20);
+  pages.sort((a, b) => {
+    const keyA = new Date(a.pageNumber);
+    const keyB = new Date(b.pageNumber);
+    // Compare the 2 dates
+    if (keyA < keyB) return -1;
+    if (keyA > keyB) return 1;
+    return 0;
+  });
 
-        Svg2Pdf(pdfFile, pages[i].svg(), config.edgeMargin, config.pageMargin);
-        console.log(`Page ${i} generated`);
-        pages[i] = null;
-      }
-    );
+  for (let i = 0; i < pages.length; i += 1) {
+    pdfFile.addPage({
+      margins: {
+        top: config.pageMargin,
+        bottom: config.pageMargin,
+        left: config.edgeMargin,
+        right: config.edgeMargin,
+      },
+    }).text(`Page: ${i + 1} of ${pages.length}. File: ${pages[i]}`, 50, 20);
+
+    Svg2Pdf(pdfFile, pages[i].svg(), config.edgeMargin, config.pageMargin);
+    console.log(`Page ${i} generated`);
+    pages[i] = null;
   }
 
   pdfFile.end();
+
+  console.log('Generation complete');
 }
 
 function createPattern(imagePath, settings) {

@@ -2,17 +2,18 @@
 
 const PrepImage = require('../src/prepImage.js');
 const I2P = require('../src/image2pattern.js');
+const path = require('path');
 
-const bwImagePath = 'AHC_2110.jpg';
+const bwImagePath = 'sample.png';
 // const colorImagePath = 'AHC_4958.png';
 
 const settings = {
-  outputLocation: 'outputs',
+  outputLocation: './outputs',
   edgeMargin: 55,
   pageMargin: 60,
   boxSize: 11,
-  imgMaxWidth: 200,
-  imgMaxHeight: 200,
+  imgMaxWidth: 100,
+  imgMaxHeight: 100,
   colorMode: 'monochrome',
   colorCount: 64,
   darkColor: '#555555', // Dark square fill color.
@@ -26,4 +27,4 @@ const settings = {
 console.log('Running Monochrome test');
 PrepImage.prepImage(bwImagePath, settings, (value) => { console.log(value); });
 
-I2P.generatePattern(bwImagePath, settings);
+I2P.generatePattern(path.join(settings.outputLocation, 'images', bwImagePath), settings);
