@@ -6,7 +6,7 @@ function showColorControls(mode) {
   const full = '.control-set--full-color';
   const mono = '.control-set--monochrome';
 
-  if (mode === 'full-color') {
+  if (mode === 'fullcolor') {
     $(full).show();
     $(mono).hide();
   } else {
