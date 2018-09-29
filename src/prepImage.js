@@ -49,7 +49,7 @@ function Process(image, outputPath, settings) {
 }
 
 async function prepImage(imagePath, settings, callback) {
-  const config = Object.assign(defaultSettings, settings);
+  const config = Object.assign({}, defaultSettings, settings);
   const filePath = `${config.outputLocation}/images/${imagePath}`;
 
   // TODO: Trim White space from edges.

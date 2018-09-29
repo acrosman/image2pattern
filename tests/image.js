@@ -10,8 +10,8 @@ const settings = {
   edgeMargin: 55,
   pageMargin: 60,
   boxSize: 11,
-  imgMaxWidth: 200,
-  imgMaxHeight: 200,
+  imgMaxWidth: 400,
+  imgMaxHeight: 300,
   colorMode: 'monochrome',
   colorCount: 64,
   darkColor: '#555', // Dark square fill color.
@@ -26,4 +26,6 @@ PrepImage.prepImage(bwImagePath, settings, (value) => { console.log(value); });
 
 console.log('Running Vibrant test');
 settings.colorMode = 'vibrant';
+settings.imgMaxWidth = 300;
+settings.imgMaxHeight = 200;
 PrepImage.prepImage(colorImagePath, settings, (value) => { console.log(value); });

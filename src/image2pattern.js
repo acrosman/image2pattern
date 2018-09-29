@@ -137,7 +137,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
 }
 
 function createPattern(imagePath, settings) {
-  const config = Object.assign(defaultSettings, settings);
+  const config = Object.assign({}, defaultSettings, settings);
 
   // TODO: Add support for picking page size.
   const pdfFile = new PdfKit();
