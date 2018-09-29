@@ -2,8 +2,8 @@
 
 const PrepImage = require('../src/prepImage.js');
 
-const bwImagePath = 'AHC_2110.jpg';
-const colorImagePath = 'AHC_4958.png';
+const bwImagePath = 'sample_images/AHC_2110.jpg';
+const colorImagePath = 'sample_images/AHC_4958.png';
 
 const settings = {
   outputLocation: 'outputs',

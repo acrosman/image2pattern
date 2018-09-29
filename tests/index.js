@@ -3,7 +3,7 @@
 const PrepImage = require('../src/prepImage.js');
 const I2P = require('../src/image2pattern.js');
 
-const imagePath = 'sample.png';
+const imagePath = 'sample_images/sample.png';
 
 const settings = {
   outputLocation: 'outputs',

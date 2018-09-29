@@ -38,10 +38,10 @@ async function drawPatternPage(image, startX, startY, width, height, settings) {
 
   image.scan(startX, startY, width, height, (x, y) => {
     // TODO: Add bold line every 10 rows and columns.
-    // TODO: Add color support.
-    // TODO: Replace with solution that assumes it should use the pixel color's
-    //       closest thread match.
     currentColor = ColorUtils.int2CssHex(image.getPixelColor(x, y));
+    if (settings.colorMode !== 'monochrome') {
+      currentColor = threads.closestThreadColor(ColorUtils.hex2Rgb(currentColor));
+    }
     // Determine the location of this box, and draw.
     rx = (x - startX) * config.boxSize;
     ry = (y - startY) * config.boxSize;

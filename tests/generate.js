@@ -4,8 +4,8 @@ const path = require('path');
 const PrepImage = require('../src/prepImage.js');
 const I2P = require('../src/image2pattern.js');
 
-const bwImagePath = 'sample.png';
-// const colorImagePath = 'AHC_4958.png';
+//const ImagePath = 'sample_images/sample.png';
+const ImagePath = 'sample_images/AHC_4958.png';
 
 const settings = {
   outputLocation: './outputs',
@@ -24,7 +24,11 @@ const settings = {
   saveSvgFiles: false, // Save the SVG files used for PDF content.
 };
 
-console.log('Running Monochrome test');
-PrepImage.prepImage(bwImagePath, settings, (value) => { console.log(value); });
+// console.log('Running Monochrome generation test');
+// PrepImage.prepImage(ImagePath, settings, (value) => { console.log(value); });
 
-I2P.generatePattern(path.join(settings.outputLocation, 'images', bwImagePath), settings);
+console.log('Running Vibrant generation test');
+settings.colorMode = 'vibrant';
+PrepImage.prepImage(ImagePath, settings, (value) => { console.log(value); });
+
+I2P.generatePattern(path.join(settings.outputLocation, 'images', ImagePath), settings);
