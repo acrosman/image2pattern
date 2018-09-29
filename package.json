@@ -1,6 +1,6 @@
 {
   "name": "image2pattern",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha",
   "description": "A simple app to convert an image to a cross stitch pattern.",
   "main": "main.js",
   "scripts": {
