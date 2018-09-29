@@ -13,7 +13,7 @@ const settings = {
   imgMaxWidth: 400,
   imgMaxHeight: 300,
   colorMode: 'monochrome',
-  colorCount: 64,
+  colorCount: 128,
   darkColor: '#555555', // Dark square fill color.
   lightColor: '#FDFDFD', // Light square fill color.
   lineColor: '#111111', // Color of the grid.
@@ -24,8 +24,8 @@ const settings = {
 console.log('Running Monochrome test');
 PrepImage.prepImage(bwImagePath, settings, (value) => { console.log(value); });
 
-console.log('Running Vibrant test');
-settings.colorMode = 'vibrant';
+console.log('Running Full Color test');
+settings.colorMode = 'full-color';
 settings.imgMaxWidth = 300;
 settings.imgMaxHeight = 200;
 PrepImage.prepImage(colorImagePath, settings, (value) => { console.log(value); });

@@ -3,14 +3,14 @@
  */
 
 function showColorControls(mode) {
-  const vibrant = '.control-set--vibrant';
+  const full = '.control-set--full-color';
   const mono = '.control-set--monochrome';
 
-  if (mode === 'vibrant') {
-    $(vibrant).show();
+  if (mode === 'full-color') {
+    $(full).show();
     $(mono).hide();
   } else {
-    $(vibrant).hide();
+    $(full).hide();
     $(mono).show();
   }
 }

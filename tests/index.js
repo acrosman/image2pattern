@@ -12,7 +12,7 @@ const settings = {
   boxSize: 11,
   imgMaxWidth: 200,
   imgMaxHeight: 200,
-  colorMode: 'vibrant',
+  colorMode: 'full-color',
   colorCount: 64,
   darkColor: '#222222', // Dark square fill color.
   lightColor: '#FFFF33', // Light square fill color.

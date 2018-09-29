@@ -58,6 +58,12 @@ function int2CssHex(intColor) {
   return hexString.slice(0, -2);
 }
 
+// Uses the W3C guideline for a dark color vs light.
+function isDarkColor(rgb) {
+  // See https://www.w3.org/TR/AERT/#color-contrast
+  return (((rgb.r * 299) + (rgb.g * 587) + (rgb.b * 114)) / 1000) >= 128;
+}
+
 exports.cssHex2JimpInt = cssHex2JimpInt;
 exports.rgb2Hex = rgb2Hex;
 exports.component2Hex = component2Hex;
@@ -65,3 +71,4 @@ exports.hex2Rgb = hexToRgb;
 exports.colorDistance = colorDistance;
 exports.closestColor = closestColor;
 exports.int2CssHex = int2CssHex;
+exports.isDarkColor = isDarkColor;

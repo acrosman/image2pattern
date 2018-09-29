@@ -27,8 +27,8 @@ const settings = {
 // console.log('Running Monochrome generation test');
 // PrepImage.prepImage(ImagePath, settings, (value) => { console.log(value); });
 
-console.log('Running Vibrant generation test');
-settings.colorMode = 'vibrant';
+console.log('Running Full Color generation test');
+settings.colorMode = 'full-color';
 PrepImage.prepImage(ImagePath, settings, (value) => { console.log(value); });
 
 I2P.generatePattern(path.join(settings.outputLocation, 'images', ImagePath), settings);

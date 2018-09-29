@@ -1,5 +1,4 @@
 const Jimp = require('jimp');
-const Vibrant = require('node-vibrant');
 const ColorUtils = require('./colorUtils.js');
 
 const defaultSettings = {
@@ -12,40 +11,28 @@ const defaultSettings = {
   lightColor: '#FFFF33', // Light square fill color.
 };
 
-async function vibrantProcess(image, outputPath, settings) {
-  // TODO: all the actual vibrant related "stuff".
-  image.scaleToFit(settings.imgMaxWidth, settings.imgMaxHeight); // Scale to fit the limits.
-  try {
-    const vibrant = new Vibrant(image, settings.colorCount, 3);
-    const swatches = vibrant.swatches();
-    image.scan(0, 0, image.getWidth(), image.getHeight(), (x, y) => {
-
-    });
-  } catch (err) {
-    console.log(`Error running vibrant ${err}`);
-  }
-  image.write(outputPath);
+async function colorProcess(image, outputPath, settings) {
+  const level = Math.log2(settings.colorCount);
+  image.scaleToFit(settings.imgMaxWidth, settings.imgMaxHeight) // Scale to fit the limits.
+    .posterize(level)
+    .write(outputPath);
 }
 
-function Process(image, outputPath, settings) {
-  if (settings.colorMode === 'monochrome') {
-    image
-      .scaleToFit(settings.imgMaxWidth, settings.imgMaxHeight) // Scale to fit the limits.
-      .contrast(1) // Max out the contrast.
-      .greyscale() // Go black and white.
-      .scan(0, 0, image.getWidth(), image.getHeight(), (x, y) => {
-        let currentColor;
-        if (image.getPixelColor(x, y) < settings.breakColor) {
-          currentColor = settings.darkColor;
-        } else {
-          currentColor = settings.lightColor;
-        }
-        image.setPixelColor(currentColor, x, y);
-      })
-      .write(outputPath);
-  } else {
-    vibrantProcess(image, outputPath, settings);
-  }
+function MonochromeProcess(image, outputPath, settings) {
+  image
+    .scaleToFit(settings.imgMaxWidth, settings.imgMaxHeight) // Scale to fit the limits.
+    .contrast(1) // Max out the contrast.
+    .greyscale() // Go black and white.
+    .scan(0, 0, image.getWidth(), image.getHeight(), (x, y) => {
+      let currentColor = ColorUtils.hexToRgb(ColorUtils.int2CssHex(image.getPixelColor(x, y)));
+      if (ColorUtils.isDarkColor(currentColor)) {
+        currentColor = settings.darkColor;
+      } else {
+        currentColor = settings.lightColor;
+      }
+      image.setPixelColor(currentColor, x, y);
+    })
+    .write(outputPath);
 }
 
 async function prepImage(imagePath, settings, callback) {
@@ -67,7 +54,11 @@ async function prepImage(imagePath, settings, callback) {
     // handled. That then updates the values of config which throws off the
     // processing when execution returns.  Proper promise may be needed.
     const image = await Jimp.read(imagePath);
-    Process(image, filePath, config);
+    if (settings.colorMode === 'monochrome') {
+      MonochromeProcess(image, filePath, config);
+    } else {
+      colorProcess(image, filePath, settings);
+    }
     callback(filePath);
   } catch (err) {
     console.log(err);
