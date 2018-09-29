@@ -40,7 +40,11 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
     // TODO: Add bold line every 10 rows and columns.
     currentColor = ColorUtils.int2CssHex(image.getPixelColor(x, y));
     if (settings.colorMode !== 'monochrome') {
-      const thread = threads.closestThreadColor(ColorUtils.hex2Rgb(currentColor));
+      const color = ColorUtils.hex2Rgb(currentColor);
+      if (color === null) {
+        console.log(`wtf with ${currentColor} from ${image.getPixelColor(x, y)}`)
+      }
+      const thread = threads.closestThreadColor(color);
       if (!colorIndex.hasOwnProperty(thread.DMC)) {
         colorIndex[thread.DMC] = thread;
       }

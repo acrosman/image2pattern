@@ -54,7 +54,13 @@ function closestColor(labColor, labColorList) {
 
 // Convert int color to css hex without Alpha channel.
 function int2CssHex(intColor) {
-  const hexString = `#${intColor.toString(16).toUpperCase()}`;
+  let hexString = `#${intColor.toString(16).toUpperCase()}`;
+
+  // If the color is too small, to be detected, go to black.
+  if (hexString.length < 9) {
+    hexString = '#00000000';
+  }
+
   return hexString.slice(0, -2);
 }
 
