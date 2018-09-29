@@ -14,8 +14,17 @@ function component2Hex(c) {
   return hex.length === 1 ? `0${hex}` : hex;
 }
 
+// Convert an rgb object into a css-style hex value
 function rgb2Hex(rgb) {
   return `#${component2Hex(rgb.r)}${component2Hex(rgb.g)}${component2Hex(rgb.b)}`;
+}
+
+// Convert a standard CSS style hex color value to the integer value that JIMP
+// expects. Assumes the CSS value is in the form '#[RR][GG][BB]' and adds unless
+// an alpha is provided produces an totally solid color.
+function cssHex2JimpInt(cssValue, alphaChannel = 'FF') {
+  const color = `0x${cssValue.slice(-6)}${alphaChannel}`;
+  return parseInt(color, 16); // Done it two steps to ease debugging.
 }
 
 // Calculate the DeltaE between two RGB objects.
@@ -43,7 +52,7 @@ function closestColor(labColor, labColorList) {
   return closest;
 }
 
-
+exports.cssHex2JimpInt = cssHex2JimpInt;
 exports.rgb2Hex = rgb2Hex;
 exports.component2Hex = component2Hex;
 exports.hex2Rgb = hexToRgb;

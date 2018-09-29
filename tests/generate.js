@@ -15,9 +15,9 @@ const settings = {
   imgMaxHeight: 200,
   colorMode: 'monochrome',
   colorCount: 64,
-  darkColor: 0x55555555, // Dark square fill color.
-  lightColor: 0xEEEEEEFF, // Light square fill color.
-  lineColor: '#111', // Color of the grid.
+  darkColor: '#555555', // Dark square fill color.
+  lightColor: '#EEEEEE', // Light square fill color.
+  lineColor: '#111111', // Color of the grid.
   breakColor: '11000', // Value of light vs dark squares.
   fillOpacity: '0.4', // Opacity of the boxes.
   saveSvgFiles: false, // Save the SVG files used for PDF content.

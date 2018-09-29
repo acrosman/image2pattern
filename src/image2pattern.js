@@ -14,9 +14,9 @@ const defaultSettings = {
   boxSize: 10,
   colorMode: 'monochrome',
   colorCount: 64,
-  darkColor: '#444', // Dark square fill color.
-  lightColor: '#FF3', // Light square fill color.
-  lineColor: '#000', // Color of the grid.
+  darkColor: '#444444', // Dark square fill color.
+  lightColor: '#FFFF33', // Light square fill color.
+  lineColor: '#000000', // Color of the grid.
   breakColor: '10000', // Value of light vs dark squares.
   fillOpacity: '0.3', // Opacity of the boxes.
   saveSvgFiles: true, // Save the SVG files used for PDF content.

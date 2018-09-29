@@ -8,8 +8,8 @@ const defaultSettings = {
   outputLocation: './outputs',
   colorMode: 'monochrome',
   colorCount: 64,
-  darkColor: 0x444444, // Dark square fill color.
-  lightColor: 0xFFFF33, // Light square fill color.
+  darkColor: '#444444', // Dark square fill color.
+  lightColor: '#FFFF33', // Light square fill color.
 };
 
 async function vibrantProcess(image, outputPath, settings) {
@@ -53,11 +53,13 @@ async function prepImage(imagePath, settings, callback) {
   const filePath = `${config.outputLocation}/images/${imagePath}`;
 
   // TODO: Trim White space from edges.
-  // TODO: Consider Potrace https://www.npmjs.com/package/potrace (GPL)
 
   // JIMP is picky about types, so make sure the sizes are integers.
   config.imgMaxHeight *= 1;
   config.imgMaxWidth *= 1;
+  config.darkColor = ColorUtils.cssHex2JimpInt(config.darkColor);
+  config.lightColor = ColorUtils.cssHex2JimpInt(config.lightColor);
+
   console.log(config);
 
   try {
