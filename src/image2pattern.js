@@ -6,7 +6,6 @@ const SVG = require('svgjs')(window);
 const Jimp = require('jimp');
 const ColorUtils = require('./colorUtils.js');
 const threads = require('./threadColors.js');
-const symbolList = require('./symbols.js');
 
 const defaultSettings = {
   outputLocation: './outputs',
@@ -46,7 +45,7 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
       }
       const thread = threads.closestThreadColor(color);
       if (!colorIndex.hasOwnProperty(thread.DMC)) {
-        colorIndex[thread.DMC] = thread;
+        colorIndex[thread.DMC] = Object.assign({}, thread);
       }
       currentColor = thread.Hex;
     }
@@ -108,7 +107,8 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     // Set the pixal range for this page.
     pageHeight = Math.min(pageBoxCountHeight, height - pageStartY);
     pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
-    promisedPage = drawPatternPage(image, pageStartX, pageStartY, pageWidth, pageHeight, config, colorIndex);
+    promisedPage = drawPatternPage(image, pageStartX, pageStartY, pageWidth,
+      pageHeight, config, colorIndex);
     promisedPage.pageNumber = page;
     pages.push(promisedPage);
     // Carry the current X position over as the start of the next page.
@@ -145,6 +145,25 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     Svg2Pdf(pdfFile, pages[i].svg(), config.edgeMargin, config.pageMargin);
     console.log(`Page ${i} generated`);
     pages[i] = null;
+  }
+
+  if (Object.keys(colorIndex).length > 2) {
+    // Add key page to the end.
+    pdfFile.addPage({
+      margins: {
+        top: config.pageMargin,
+        bottom: config.pageMargin,
+        left: config.edgeMargin,
+        right: config.edgeMargin,
+      },
+    }).text('Adding color key here...', 50, 20);
+
+    const colors = Object.values(colorIndex);
+    for (let i = 0; i < colors.length; i += 1) {
+      pdfFile.text(`${colors[i].symbol} DMC: ${colors[i].DMC} – ${colors[i].Name}`);
+    }
+
+    console.log(colorIndex);
   }
 
   pdfFile.end();

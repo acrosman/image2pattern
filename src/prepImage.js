@@ -11,7 +11,7 @@ const defaultSettings = {
   lightColor: '#FFFF33', // Light square fill color.
 };
 
-async function colorProcess(image, outputPath, settings) {
+async function ColorProcess(image, outputPath, settings) {
   const level = Math.log2(settings.colorCount);
   image.scaleToFit(settings.imgMaxWidth, settings.imgMaxHeight) // Scale to fit the limits.
     .posterize(level)
@@ -57,7 +57,7 @@ async function prepImage(imagePath, settings, callback) {
     if (settings.colorMode === 'monochrome') {
       MonochromeProcess(image, filePath, config);
     } else {
-      colorProcess(image, filePath, config);
+      ColorProcess(image, filePath, config);
     }
     callback(filePath);
   } catch (err) {

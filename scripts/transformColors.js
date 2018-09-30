@@ -477,7 +477,40 @@ const fs = require('fs');
 const Vibrant = require('node-vibrant');
 const cutils = require('../src/colorUtils.js');
 
+function genSymbolList() {
+  const fullSet = ['x'];
+  const symbolRanges = [
+    { start: 0x2600, stop: 0x26AF },
+    { start: 0x2200, stop: 0x22FF },
+    { start: 0x2B00, stop: 0x2B2F },
+    { start: 0x1F300, stop: 0x1F4FF },
+  ];
+
+  const skipSymbols = [
+    String.fromCodePoint(0x2620), String.fromCodePoint(0x262D),
+    String.fromCodePoint(0x2673), String.fromCodePoint(0x2674),
+    String.fromCodePoint(0x2675), String.fromCodePoint(0x2676),
+    String.fromCodePoint(0x2677), String.fromCodePoint(0x2678),
+    String.fromCodePoint(0x2679), String.fromCodePoint(0x267C),
+    String.fromCodePoint(0x269D), String.fromCodePoint(0x269E),
+    String.fromCodePoint(0x269F), '⊷',
+  ];
+  let point = '';
+  let range = {};
+  for (let i = 0; i < symbolRanges.length; i += 1) {
+    range = symbolRanges[i];
+    for (let k = range.start; k < range.stop; k += 1) {
+      point = String.fromCodePoint(k);
+      if (!skipSymbols.includes(point)) {
+        fullSet.push(point);
+      }
+    }
+  }
+  return fullSet;
+}
+
 const restructured = [];
+const symbols = genSymbolList();
 let rgb = {};
 for (let i = 0; i < DMC.length; i += 1) {
   rgb = cutils.hex2Rgb(DMC[i][2]);
@@ -487,6 +520,7 @@ for (let i = 0; i < DMC.length; i += 1) {
     Hex: DMC[i][2],
     'RGB': rgb,
     lab: Vibrant.Util.rgbToCIELab(rgb.r, rgb.g, rgb.b),
+    symbol: symbols[i],
   };
 }
 
