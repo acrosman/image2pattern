@@ -24,7 +24,7 @@ function MonochromeProcess(image, outputPath, settings) {
     .contrast(1) // Max out the contrast.
     .greyscale() // Go black and white.
     .scan(0, 0, image.getWidth(), image.getHeight(), (x, y) => {
-      let currentColor = ColorUtils.hexToRgb(ColorUtils.int2CssHex(image.getPixelColor(x, y)));
+      let currentColor = ColorUtils.hex2Rgb(ColorUtils.int2CssHex(image.getPixelColor(x, y)));
       if (ColorUtils.isDarkColor(currentColor)) {
         currentColor = settings.darkColor;
       } else {
