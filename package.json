@@ -9,7 +9,24 @@
     "gen-test": "node tests/generate.js",
     "simple-debug": "node tests/index.js",
     "debug": "electron --inspect=5858 .",
-    "rebuild-colors": "node scripts/transformColors.js"
+    "rebuild-colors": "node scripts/transformColors.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder -wl",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.electron.image2pattern",
+    "productName": "image2pattern",
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": "zip"
+    },
+    "win": {
+      "target": "zip"
+    },
+    "linux": {
+      "target": "zip"
+    }
   },
   "keywords": [
     "images",
@@ -23,7 +40,6 @@
     "bootstrap": "^4.1.3",
     "bootstrap-colorpicker": "^3.0.3",
     "devtron": "^1.4.0",
-    "electron": "^3.0.2",
     "electron-debug": "^2.0.0",
     "eslint": "^5.6.1",
     "eslint-config-airbnb": "^17.1.0",
@@ -40,6 +56,8 @@
     "svgjs": "^2.6.2"
   },
   "devDependencies": {
-    "debug-menu": "^0.6.1"
+    "debug-menu": "^0.6.1",
+    "electron": "^3.0.2",
+    "electron-builder": "^20.28.4"
   }
 }
