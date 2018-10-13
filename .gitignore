@@ -2,6 +2,9 @@
 images
 outputs
 
+# Distro folder
+dist
+
 # Logs
 logs
 *.log

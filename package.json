@@ -11,7 +11,7 @@
     "debug": "electron --inspect=5858 .",
     "rebuild-colors": "node scripts/transformColors.js",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder -wl",
+    "dist": "electron-builder -wlm",
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
