@@ -62,7 +62,7 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
     const countSize = 10;
     if (rx % (countSize * config.boxSize) === 0 && ry % (countSize * config.boxSize) === 0) {
       draw.rect(config.boxSize * countSize, config.boxSize * countSize)
-        .move(rx, ry)
+        .move(rx - (startX % countSize) * config.boxSize, ry - (startY % countSize) * config.boxSize)
         .fill({color: '#FFF', opacity: 0})
         .stroke({color: config.lineColor, opacity: 1, width: 2})
         .opacity(1);
