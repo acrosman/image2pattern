@@ -62,16 +62,17 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
     const countSize = 10;
     if (rx % (countSize * config.boxSize) === 0 && ry % (countSize * config.boxSize) === 0) {
       draw.rect(config.boxSize * countSize, config.boxSize * countSize)
-        .move(rx - (startX % countSize) * config.boxSize, ry - (startY % countSize) * config.boxSize)
-        .fill({color: '#FFF', opacity: 0})
-        .stroke({color: config.lineColor, opacity: 1, width: 2})
+        .move(rx - (startX % countSize) * config.boxSize,
+          ry - (startY % countSize) * config.boxSize)
+        .fill({ color: '#FFF', opacity: 0 })
+        .stroke({ color: config.lineColor, opacity: 1, width: 2 })
         .opacity(1);
     }
     // console.log(`Pixel ${x}x${y}: printed at: ${rx}x${ry} as ${side}`);
   });
 
   if (config.saveSvgFiles) {
-    const imageFilePath = (process.platform === "win32")
+    const imageFilePath = (process.platform === 'win32')
       ? `${config.outputLocation}\\images\\page-${startX}x${startY}.svg`
       : `${config.outputLocation}/images/page-${startX}x${startY}.svg`;
     fs.writeFile(
