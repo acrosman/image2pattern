@@ -22,6 +22,7 @@ const defaultSettings = {
   saveSvgFiles: true, // Save the SVG files used for PDF content.
 };
 
+// Draw one page of a pattern.
 async function drawPatternPage(image, startX, startY, width, height, settings, colorIndex) {
   const config = Object.assign(defaultSettings, settings);
 
@@ -45,8 +46,8 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
       }
       const thread = threads.closestThreadColor(color);
       // TODO: Refactor to remove hasOwnProperty and param reassignment.
-      if (!colorIndex.hasOwnProperty(thread.DMC)) {
-        colorIndex[thread.DMC] = Object.assign({}, thread);
+      if (Object.prototype.hasOwnProperty.call(thread, 'DMC')) {
+        colorIndex.addThread(thread);
       }
       currentColor = thread.Hex;
     }
@@ -100,7 +101,65 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
   const pagesWide = Math.ceil(width / pageBoxCountWidth);
   const pagesTall = Math.ceil(height / pageBoxCountHeight);
   const totalPages = pagesTall * pagesWide;
-  const colorIndex = { colors: [] };
+  // TODO: Find a cleaner way to handle this.
+  const threadIndex = {
+    threads: {},
+    symbols: [],
+    genSymbol() {
+      const fullSet = ['x'];
+      const symbolRanges = [
+        { start: 0x003C, stop: 0x005C }, // Capital letters and a few marks.
+        { start: 0x00A1, stop: 0x00B7 }, // Standard signs and symbols.
+        { start: 0x03A8, stop: 0x03EE }, // Greek letters.
+        { start: 0x0531, stop: 0x0556 }, // Armenian letters.
+        // TODO: find an font that includes these marks and revisit if they could be used.
+        // { start: 0x2600, stop: 0x26AF }, // Miscellanious Symbols.
+        // { start: 0x2200, stop: 0x22FF }, // Math Operators.
+        // { start: 0x2B00, stop: 0x2B2F }, // Miscellanious Symbols and arrows.
+      ];
+
+      // Some symbols are too similar to others, or are political in nature and so are
+      // removed to avoid frustrtion of confusion.
+      const skipSymbols = [
+        String.fromCodePoint(0x00AD), String.fromCodePoint(0x03D3),
+        String.fromCodePoint(0x03D4), String.fromCodePoint(0x03D9),
+        String.fromCodePoint(0x03DB), String.fromCodePoint(0x03DD),
+        String.fromCodePoint(0x03DF), String.fromCodePoint(0x03E0),
+        String.fromCodePoint(0x03E3), String.fromCodePoint(0x03E4),
+        String.fromCodePoint(0x03E9), String.fromCodePoint(0x03E8),
+        String.fromCodePoint(0x03EB), String.fromCodePoint(0x03EC),
+        // TODO: When the rest of the code points above are restored, restore these as well.
+        // String.fromCodePoint(0x2620), String.fromCodePoint(0x262D),
+        // String.fromCodePoint(0x2673), String.fromCodePoint(0x2674),
+        // String.fromCodePoint(0x2675), String.fromCodePoint(0x2676),
+        // String.fromCodePoint(0x2677), String.fromCodePoint(0x2678),
+        // String.fromCodePoint(0x2679), String.fromCodePoint(0x267C),
+        // String.fromCodePoint(0x269D), String.fromCodePoint(0x269E),
+        // String.fromCodePoint(0x269F),
+      ];
+      let point = '';
+      let range = {};
+
+      for (let i = 0; i < symbolRanges.length; i += 1) {
+        range = symbolRanges[i];
+        for (let k = range.start; k < range.stop; k += 1) {
+          point = String.fromCodePoint(k);
+          if (!skipSymbols.includes(point) && !this.symbols.includes(point)) {
+            fullSet.push(point);
+          }
+        }
+      }
+      const selected = fullSet[Math.floor(Math.random() * fullSet.length)];
+      this.symbols.push(selected);
+      return selected;
+    },
+    addThread(thread) {
+      if (!Object.prototype.hasOwnProperty.call(this.threads, thread.DMC)) {
+        this.threads[thread.DMC] = Object.assign({}, thread);
+        this.threads[thread.DMC].symbol = this.genSymbol();
+      }
+    },
+  };
 
   pdfFile.text(`This image is ${width} x ${height}.`);
   pdfFile.text(`Each page can hold ${pageBoxCountWidth} boxes across and ${pageBoxCountHeight} down.`);
@@ -122,7 +181,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     pageHeight = Math.min(pageBoxCountHeight, height - pageStartY);
     pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
     promisedPage = drawPatternPage(image, pageStartX, pageStartY, pageWidth,
-      pageHeight, config, colorIndex);
+      pageHeight, config, threadIndex);
     promisedPage.pageNumber = page;
     pages.push(promisedPage);
     // Carry the current X position over as the start of the next page.
@@ -161,7 +220,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     pages[i] = null;
   }
 
-  if (Object.keys(colorIndex).length > 2) {
+  if (Object.keys(threadIndex.threads).length > 2) {
     // Add key page to the end.
     pdfFile.addPage({
       margins: {
@@ -172,12 +231,14 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
       },
     }).text('Adding color key here...', 50, 20);
 
-    const colors = Object.values(colorIndex);
+    pdfFile.registerFont('Roboto', 'fonts/Roboto/Roboto-Regular.ttf');
+    pdfFile.font('Roboto').fontSize(12);
+    const colors = Object.values(threadIndex.threads);
     for (let i = 0; i < colors.length; i += 1) {
       pdfFile.text(`${colors[i].symbol} DMC: ${colors[i].DMC} – ${colors[i].Name}`);
     }
 
-    console.log(colorIndex);
+    console.log(threadIndex.threads);
   }
 
   pdfFile.end();
