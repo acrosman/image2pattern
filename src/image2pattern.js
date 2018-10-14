@@ -25,8 +25,8 @@ const defaultSettings = {
 async function drawPatternPage(image, startX, startY, width, height, settings, colorIndex) {
   const config = Object.assign(defaultSettings, settings);
 
-  const drawingWidth = config.boxSize * width;
-  const drawingHeight = config.boxSize * height;
+  const drawingWidth = config.boxSize * width + (Math.floor((width-1) / 10));
+  const drawingHeight = config.boxSize * height + (Math.floor((height-1) / 10));
 
   let rx; let ry;
   let currentColor = config.lightColor;
@@ -50,13 +50,15 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
       currentColor = thread.Hex;
     }
     // Determine the location of this box, and draw.
-    rx = (x - startX) * config.boxSize;
-    ry = (y - startY) * config.boxSize;
+    rx = (x - startX) * config.boxSize + Math.floor((x - startX) / 10);
+    ry = (y - startY) * config.boxSize + Math.floor((y - startY) / 10);
     draw.rect(config.boxSize, config.boxSize)
       .move(rx, ry)
       .fill(currentColor)
       .stroke(config.lineColor)
-      .opacity(config.fillOpacity);
+      .attr({
+        'fill-opacity': config.fillOpacity
+      });
     // console.log(`Pixel ${x}x${y}: printed at: ${rx}x${ry} as ${side}`);
   });
 
