@@ -42,7 +42,7 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
     if (settings.colorMode !== 'monochrome') {
       const color = ColorUtils.hex2Rgb(currentColor);
       if (color === null) {
-        console.log(`wtf with ${currentColor} from ${image.getPixelColor(x, y)}`)
+        console.log(`wtf with ${currentColor} from ${image.getPixelColor(x, y)}`);
       }
       const thread = threads.closestThreadColor(color);
       // TODO: Refactor to remove hasOwnProperty and param reassignment.
