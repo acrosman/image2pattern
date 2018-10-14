@@ -50,8 +50,8 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
       currentColor = thread.Hex;
     }
     // Determine the location of this box, and draw.
-    rx = (x - startX) * config.boxSize + Math.floor(x / 10);
-    ry = (y - startY) * config.boxSize + Math.floor(y / 10);
+    rx = (x - startX) * config.boxSize + Math.floor((x - startX) / 10);
+    ry = (y - startY) * config.boxSize + Math.floor((y - startY) / 10);
     draw.rect(config.boxSize, config.boxSize)
       .move(rx, ry)
       .fill(currentColor)
