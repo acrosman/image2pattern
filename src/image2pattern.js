@@ -44,6 +44,7 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
         console.log(`wtf with ${currentColor} from ${image.getPixelColor(x, y)}`)
       }
       const thread = threads.closestThreadColor(color);
+      // TODO: Refactor to remove hasOwnProperty and param reassignment.
       if (!colorIndex.hasOwnProperty(thread.DMC)) {
         colorIndex[thread.DMC] = Object.assign({}, thread);
       }
