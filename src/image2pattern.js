@@ -6,6 +6,7 @@ const SVG = require('svgjs')(window);
 const Jimp = require('jimp');
 const ColorUtils = require('./colorUtils.js');
 const threads = require('./threadColors.js');
+const path = require('path');
 
 const defaultSettings = {
   outputLocation: './outputs',
@@ -73,8 +74,8 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
 
   if (config.saveSvgFiles) {
     const imageFilePath = (process.platform === 'win32')
-      ? `${config.outputLocation}\\images\\page-${startX}x${startY}.svg`
-      : `${config.outputLocation}/images/page-${startX}x${startY}.svg`;
+      ? path.dirname(`${config.outputLocation}\\images\\page-${startX}x${startY}.svg`)
+      : path.dirname(`${config.outputLocation}/images/page-${startX}x${startY}.svg`);
     fs.writeFile(
       imageFilePath,
       draw.svg(),
