@@ -237,7 +237,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     for (let i = 0; i < colors.length; i += 1) {
       const colorInfo = `${colors[i].symbol} DMC: ${colors[i].DMC} – ${colors[i].Name} `;
       pdfFile.fillColor('black')
-      .text(colorInfo.slice(0, 500),{ continued: true }).fillColor(colors[i].Hex).text(`‎■`);
+      .text(colorInfo,{ continued: true }).fillColor(colors[i].Hex).text(`‎■`);
     }
 
     console.log(threadIndex.threads);
