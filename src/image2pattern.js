@@ -235,7 +235,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     pdfFile.font('Roboto').fontSize(12);
     const colors = Object.values(threadIndex.threads);
     for (let i = 0; i < colors.length; i += 1) {
-      pdfFile.text(`${colors[i].symbol} DMC: ${colors[i].DMC} – ${colors[i].Name}`);
+      pdfFile.fillColor('black').text(`${colors[i].symbol} DMC: ${colors[i].DMC} – ${colors[i].Name}`).fillColor(colors[i].Hex).text("@");
     }
 
     console.log(threadIndex.threads);
