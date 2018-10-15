@@ -235,8 +235,9 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     pdfFile.font('DejaVuSans').fontSize(12);
     const colors = Object.values(threadIndex.threads);
     for (let i = 0; i < colors.length; i += 1) {
-      pdfFile.fillColor('black').text(`${colors[i].symbol} DMC: ${colors[i].DMC} – ${colors[i].Name}`);
-      pdfFile.fillColor(colors[i].Hex).text("#");
+      const colorInfo = `${colors[i].symbol} DMC: ${colors[i].DMC} – ${colors[i].Name} `;
+      pdfFile.fillColor('black')
+      .text(colorInfo.slice(0, 500),{ continued: true }).fillColor(colors[i].Hex).text(`‎■`);
     }
 
     console.log(threadIndex.threads);
