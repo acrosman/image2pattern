@@ -114,7 +114,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
         { start: 0x0531, stop: 0x0556 }, // Armenian letters.
         // TODO: find an font that includes these marks and revisit if they could be used.
         // { start: 0x2600, stop: 0x26AF }, // Miscellanious Symbols.
-        // { start: 0x2200, stop: 0x22FF }, // Math Operators.
+        { start: 0x2200, stop: 0x22FF }, // Math Operators.
         // { start: 0x2B00, stop: 0x2B2F }, // Miscellanious Symbols and arrows.
       ];
 
@@ -231,8 +231,8 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
       },
     }).text('Adding color key here...', 50, 20);
 
-    pdfFile.registerFont('Roboto', 'fonts/Roboto/Roboto-Regular.ttf');
-    pdfFile.font('Roboto').fontSize(12);
+    pdfFile.registerFont('DejaVuSans', 'fonts/dejavu-fonts/ttf/DejaVuSans.ttf');
+    pdfFile.font('DejaVuSans').fontSize(12);
     const colors = Object.values(threadIndex.threads);
     for (let i = 0; i < colors.length; i += 1) {
       pdfFile.text(`${colors[i].symbol} DMC: ${colors[i].DMC} – ${colors[i].Name}`);
