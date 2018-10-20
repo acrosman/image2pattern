@@ -8,12 +8,12 @@ const ColorUtils = require('./colorUtils.js');
 const threads = require('./threadColors.js');
 
 const defaultSettings = {
-  outputLocation: './outputs',
-  edgeMargin: 50,
-  pageMargin: 50,
-  boxSize: 10,
-  colorMode: 'monochrome',
-  colorCount: 64,
+  outputLocation: './outputs', // Directory for all program output.
+  edgeMargin: 50, // Pixels reserved for right or left page margin.
+  pageMargin: 50, // Pixels reserved for top and bottom page margin.
+  boxSize: 10, // Pixel size of the boxes in the pattern.
+  colorMode: 'monochrome', // Whether the pattern is meant to be B&W or color.
+  colorCount: 64, // If in full color mode, how many colors to target (powers of two).
   darkColor: '#444444', // Dark square fill color.
   lightColor: '#FFFF33', // Light square fill color.
   lineColor: '#000000', // Color of the grid.
