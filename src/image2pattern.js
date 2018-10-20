@@ -73,7 +73,7 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
   });
 
   if (config.saveSvgFiles) {
-    const imageFilePath = path.dirname(`${config.outputLocation}/images/page-${startX}x${startY}.svg`);
+    const imageFilePath = path.dirname(path.join(`${config.outputLocation}`,`/images`,`/page-${startX}x${startY}.svg`));
     fs.writeFile(
       imageFilePath,
       draw.svg(),

@@ -38,7 +38,7 @@ function MonochromeProcess(image, outputPath, settings) {
 
 async function prepImage(imagePath, settings, callback) {
   const config = Object.assign({}, defaultSettings, settings);
-  const filePath = path.basename(`${config.outputLocation}/images/${imagePath}`);
+  const filePath = path.basename(path.resolve(`${config.outputLocation}`,`/images`,`/${imagePath}`));
 
   // TODO: Trim White space from edges.
 
