@@ -1,5 +1,6 @@
 const Jimp = require('jimp');
 const ColorUtils = require('./colorUtils.js');
+const path = require('path');
 
 const defaultSettings = {
   imgMaxWidth: 100,
@@ -37,9 +38,7 @@ function MonochromeProcess(image, outputPath, settings) {
 
 async function prepImage(imagePath, settings, callback) {
   const config = Object.assign({}, defaultSettings, settings);
-  const filePath = (process.platform === "win32")
-      ? `${imagePath}`
-      : `${config.outputLocation}/images/${imagePath}`;
+  const filePath = path.basename(path.resolve(`${config.outputLocation}`,`/images`,`/${imagePath}`));
 
   // TODO: Trim White space from edges.
 
