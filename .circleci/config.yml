@@ -37,4 +37,5 @@ jobs:
       #- run: yarn test
       - run: npm run lint
 
-      - run: npm run gen-test
+      # TODO: figure out how to handle output files in CircleCI.
+      #- run: npm run gen-test
