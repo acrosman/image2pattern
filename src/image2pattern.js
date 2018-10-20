@@ -4,9 +4,9 @@ const Svg2Pdf = require('svg-to-pdfkit');
 const window = require('svgdom');
 const SVG = require('svgjs')(window);
 const Jimp = require('jimp');
+const path = require('path');
 const ColorUtils = require('./colorUtils.js');
 const threads = require('./threadColors.js');
-const path = require('path');
 
 const defaultSettings = {
   outputLocation: './outputs', // Directory for all program output.
