@@ -9,9 +9,9 @@ const threads = require('./threadColors.js');
 
 const defaultSettings = {
   outputLocation: './outputs', // Directory for all program output.
-  edgeMargin: 50, // Pixels reserved for right or left page margin.
-  pageMargin: 50, // Pixels reserved for top and bottom page margin.
-  boxSize: 10, // Pixel size of the boxes in the pattern.
+  edgeMargin: 50, // PDF Points reserved for right or left page margin.
+  pageMargin: 50, // PDF Points reserved for top and bottom page margin.
+  boxSize: 10, // Size of the boxes in the pattern (in PDF Points).
   colorMode: 'monochrome', // Whether the pattern is meant to be B&W or color.
   colorCount: 64, // If in full color mode, how many colors to target (powers of two).
   darkColor: '#444444', // Dark square fill color.
@@ -215,7 +215,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
       },
     }).text(`Page: ${i + 1} of ${pages.length}. File: ${pages[i]}`, 50, 20);
 
-    Svg2Pdf(pdfFile, pages[i].svg(), config.edgeMargin, config.pageMargin);
+    Svg2Pdf(pdfFile, pages[i].svg(), config.edgeMargin, config.pageMargin, { assumePt: true });
     console.log(`Page ${i} generated`);
     pages[i] = null;
   }
