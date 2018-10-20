@@ -1,6 +1,6 @@
 const Jimp = require('jimp');
-const ColorUtils = require('./colorUtils.js');
 const path = require('path');
+const ColorUtils = require('./colorUtils.js');
 
 const defaultSettings = {
   imgMaxWidth: 100,
