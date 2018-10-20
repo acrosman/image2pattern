@@ -75,7 +75,7 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
   });
 
   if (config.saveSvgFiles) {
-    const imageFilePath = path.dirname(path.join(`${config.outputLocation}`,`/images`,`/page-${startX}x${startY}.svg`));
+    const imageFilePath = path.join(config.outputLocation, 'images', `page-${startX}x${startY}.svg`);
     fs.writeFile(
       imageFilePath,
       draw.svg(),
@@ -236,7 +236,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     for (let i = 0; i < colors.length; i += 1) {
       const colorInfo = `${colors[i].symbol} DMC: ${colors[i].DMC} – ${colors[i].Name} `;
       pdfFile.fillColor('black')
-      .text(colorInfo,{ continued: true }).fillColor(colors[i].Hex).text(`‎■`);
+        .text(colorInfo, { continued: true }).fillColor(colors[i].Hex).text('‎■');
     }
 
     console.log(threadIndex.threads);
