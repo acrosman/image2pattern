@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "lint": "eslint --ignore-path .gitignore src",
     "image-test": "node tests/image.js",
     "gen-test": "node tests/generate.js",
     "simple-debug": "node tests/index.js",
