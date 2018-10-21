@@ -197,7 +197,7 @@ describe('Color Utils', () => {
 
       const closestColor = ColorUtils.closestColor(rgb);
 
-      Chai.expect(closestColor.Name).to.eql("Black");
+      Chai.expect(closestColor.Name).to.eql('Black');
     });
 
     it('should pick closest white if given a white color', () => {
@@ -209,7 +209,7 @@ describe('Color Utils', () => {
 
       const closestColor = ColorUtils.closestColor(rgb);
 
-      Chai.expect(closestColor.Name).to.eql("White");
+      Chai.expect(closestColor.Name).to.eql('White');
     });
 
     it('should pick closest color if given a color', () => {
@@ -221,7 +221,7 @@ describe('Color Utils', () => {
 
       const closestColor = ColorUtils.closestColor(rgb);
 
-      Chai.expect(closestColor.Name).to.eql("Parrot Green - LT");
+      Chai.expect(closestColor.Name).to.eql('Parrot Green - LT');
     });
   });
 

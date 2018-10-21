@@ -33,14 +33,11 @@ function cssHex2JimpInt(colorHex, alphaChannel = 'FF') {
 
 // Convert int color to css hex without Alpha channel.
 function int2CssHex(intColor) {
-  let hexString = `#${intColor.toString(16).toUpperCase()}`;
-
-  // If the color is too small, to be detected, go to black.
-  if (hexString.length < 9) {
-    hexString = '#00000000';
+  let hexString = `${intColor.toString(16).toUpperCase()}`;
+  if (hexString.length < 8) {
+    hexString = hexString.padStart(8, '0');
   }
-
-  return hexString.slice(0, -2);
+  return `#${hexString.slice(0, -2)}`;
 }
 
 // Calculate the DeltaE between two RGB objects.
