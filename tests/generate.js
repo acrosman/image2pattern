@@ -4,7 +4,6 @@ const path = require('path');
 const PrepImage = require('../src/prepImage.js');
 const I2P = require('../src/image2pattern.js');
 
-//const ImagePath = 'sample_images/sample.png';
 const ImagePath = 'sample_images/AHC_4958.png';
 
 const settings = {
