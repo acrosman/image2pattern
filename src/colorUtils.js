@@ -1,5 +1,9 @@
 const Vibrant = require('node-vibrant');
 
+// Derived from https://gimplearn.net/dmc_color_picker.php
+// Released under MIT license with permission.
+const DMC = require('./colors.json');
+
 function hexToRgb(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
@@ -47,21 +51,21 @@ function colorDistance(rgb1, rgb2) {
 }
 
 // Calculate the closest color from a list of options.
-function closestColor(labColor, labColorList) {
-  let closest = {};
-  let distance = 100;
+function closestColor(rgb) {
+  let closestColorFound = {};
+  let closestDistanceSoFar = 100;
   let testDist = -1;
-  for (let i = 0; i < labColorList.length; i += 1) {
-    testDist = Vibrant.Util.deltaE94(labColor, labColorList[i]);
-    if (testDist < distance) {
-      distance = testDist;
-      closest = labColorList[i];
+  DMC.some((dmcColor) => {
+    testDist = colorDistance(rgb, dmcColor.RGB);
+    if (testDist < closestDistanceSoFar) {
+      closestDistanceSoFar = testDist;
+      closestColorFound = dmcColor;
     }
-    if (distance < 1) {
-      break;
+    if (closestDistanceSoFar < 1) {
+      return closestColorFound;
     }
-  }
-  return closest;
+  });
+  return closestColorFound;
 }
 
 // Uses the W3C guideline for a dark color vs light.

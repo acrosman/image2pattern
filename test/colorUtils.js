@@ -187,6 +187,44 @@ describe('Color Utils', () => {
     });
   });
 
+  describe('Closest Color', () => {
+    it('should pick closest black if given a black color', () => {
+      const rgb = {
+        r: 0,
+        g: 0,
+        b: 0,
+      };
+
+      const closestColor = ColorUtils.closestColor(rgb);
+
+      Chai.expect(closestColor.Name).to.eql("Black");
+    });
+
+    it('should pick closest white if given a white color', () => {
+      const rgb = {
+        r: 255,
+        g: 255,
+        b: 255,
+      };
+
+      const closestColor = ColorUtils.closestColor(rgb);
+
+      Chai.expect(closestColor.Name).to.eql("White");
+    });
+
+    it('should pick closest color if given a color', () => {
+      const rgb = {
+        r: 12,
+        g: 232,
+        b: 44,
+      };
+
+      const closestColor = ColorUtils.closestColor(rgb);
+
+      Chai.expect(closestColor.Name).to.eql("Parrot Green - LT");
+    });
+  });
+
   describe('Is Dark Color', () => {
     it('should return true if YIQ brightness value is equal to or over 128', () => {
       const color = {
