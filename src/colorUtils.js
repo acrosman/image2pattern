@@ -41,9 +41,9 @@ function int2CssHex(intColor) {
 
 // Calculate the DeltaE between two RGB objects.
 function colorDistance(rgb1, rgb2) {
-  const lab1 = Vibrant.Util.rgbToCIELab(rgb1);
-  const lab2 = Vibrant.Util.rgbToCIELab(rgb2);
-  return Vibrant.Util.deltaE94(lab1, lab2);
+  const rgb1Vec3 = [rgb1.r, rgb1.g, rgb1.b];
+  const rgb2Vec3 = [rgb2.r, rgb2.g, rgb2.b];
+  return Vibrant.Util.rgbDiff(rgb1Vec3, rgb2Vec3);
 }
 
 // Calculate the closest color from a list of options.
