@@ -13,13 +13,13 @@ function hexToRgb(hex) {
   } : null;
 }
 
+function component2Hex(c) {
+  const hex = c.toString(16);
+  return hex.length === 1 ? `0${hex}` : hex;
+}
+
 // Convert an rgb object into a css-style hex value
 function rgb2Hex(rgb) {
-  function component2Hex(c) {
-    const hex = c.toString(16);
-    return hex.length === 1 ? `0${hex}` : hex;
-  }
-
   return `#${component2Hex(rgb.r)}${component2Hex(rgb.g)}${component2Hex(rgb.b)}`;
 }
 
