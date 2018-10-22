@@ -7,7 +7,7 @@ const I2P = require('../src/image2pattern.js');
 const ImagePath = 'sample_images/AHC_4958.png';
 
 const settings = {
-  outputLocation: './outputs',
+  outputLocation: 'outputs',
   edgeMargin: 55,
   pageMargin: 60,
   boxSize: 11,
@@ -28,6 +28,7 @@ const settings = {
 
 console.log('Running Full Color generation test');
 settings.colorMode = 'fullcolor';
-PrepImage.prepImage(ImagePath, settings, (value) => { console.log(value); });
-
-I2P.generatePattern(path.join(settings.outputLocation, 'images', ImagePath), settings);
+PrepImage.prepImage(ImagePath, settings, (value) => {
+  console.log(value);
+  I2P.generatePattern(path.join(settings.outputLocation, 'images', ImagePath), settings);
+});
