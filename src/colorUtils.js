@@ -1,5 +1,9 @@
 const Vibrant = require('node-vibrant');
 
+// Derived from https://gimplearn.net/dmc_color_picker.php
+// Released under MIT license with permission.
+const DMC = require('./colors.json');
+
 function hexToRgb(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
@@ -22,46 +26,43 @@ function rgb2Hex(rgb) {
 // Convert a standard CSS style hex color value to the integer value that JIMP
 // expects. Assumes the CSS value is in the form '#[RR][GG][BB]' and adds unless
 // an alpha is provided produces an totally solid color.
-function cssHex2JimpInt(cssValue, alphaChannel = 'FF') {
-  const color = `0x${cssValue.slice(-6)}${alphaChannel}`;
+function cssHex2JimpInt(colorHex, alphaChannel = 'FF') {
+  const color = `0x${colorHex.slice(-6)}${alphaChannel}`;
   return parseInt(color, 16); // Done it two steps to ease debugging.
-}
-
-// Calculate the DeltaE between two RGB objects.
-function colorDistance(rgb1, rgb2) {
-  const lab1 = Vibrant.Util.rgbToCIELab(rgb1);
-  const lab2 = Vibrant.Util.rgbToCIELab(rgb2);
-  return Vibrant.Util.deltaE94(lab1, lab2);
-}
-
-// Calculate the closest color from a list of options.
-function closestColor(labColor, labColorList) {
-  let closest = {};
-  let distance = 100;
-  let testDist = -1;
-  for (let i = 0; i < labColorList.length; i += 1) {
-    testDist = Vibrant.Util.deltaE94(labColor, labColorList[i]);
-    if (testDist < distance) {
-      distance = testDist;
-      closest = labColorList[i];
-    }
-    if (distance < 1) {
-      break;
-    }
-  }
-  return closest;
 }
 
 // Convert int color to css hex without Alpha channel.
 function int2CssHex(intColor) {
-  let hexString = `#${intColor.toString(16).toUpperCase()}`;
-
-  // If the color is too small, to be detected, go to black.
-  if (hexString.length < 9) {
-    hexString = '#00000000';
+  let hexString = `${intColor.toString(16).toUpperCase()}`;
+  if (hexString.length < 8) {
+    hexString = hexString.padStart(8, '0');
   }
+  return `#${hexString.slice(0, -2)}`;
+}
 
-  return hexString.slice(0, -2);
+// Calculate the DeltaE between two RGB objects.
+function colorDistance(rgb1, rgb2) {
+  const rgb1Vec3 = [rgb1.r, rgb1.g, rgb1.b];
+  const rgb2Vec3 = [rgb2.r, rgb2.g, rgb2.b];
+  return Vibrant.Util.rgbDiff(rgb1Vec3, rgb2Vec3);
+}
+
+// Calculate the closest color from a list of options.
+function closestColor(rgb) {
+  let closestColorFound = {};
+  let closestDistanceSoFar = 100;
+  let testDist = -1;
+  DMC.some((dmcColor) => {
+    testDist = colorDistance(rgb, dmcColor.RGB);
+    if (testDist < closestDistanceSoFar) {
+      closestDistanceSoFar = testDist;
+      closestColorFound = dmcColor;
+    }
+    if (closestDistanceSoFar < 1) {
+      return closestColorFound;
+    }
+  });
+  return closestColorFound;
 }
 
 // Uses the W3C guideline for a dark color vs light.
@@ -72,7 +73,6 @@ function isDarkColor(rgb) {
 
 exports.cssHex2JimpInt = cssHex2JimpInt;
 exports.rgb2Hex = rgb2Hex;
-exports.component2Hex = component2Hex;
 exports.hex2Rgb = hexToRgb;
 exports.colorDistance = colorDistance;
 exports.closestColor = closestColor;

@@ -4,7 +4,7 @@ const Vibrant = require('node-vibrant');
 // Rleased under MIT license with permission.
 const DMC = require('./colors.json');
 
-// Very similar to the general ColorUtils closest color but with some improvment
+// Very similar to the general ColorUtils closest color but with some improvement
 // to ease the handling of the thread list.
 // TODO: Try to replace with a use of ColorUtils.closestColor().
 function closestThreadColor(rgb) {

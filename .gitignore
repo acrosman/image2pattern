@@ -78,3 +78,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+#IntelliJ settings
+.idea/
