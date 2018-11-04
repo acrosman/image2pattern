@@ -13,7 +13,8 @@
     "rebuild-colors": "node scripts/transformColors.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder -wlm",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "test": "mocha"
   },
   "build": {
     "appId": "com.electron.image2pattern",
