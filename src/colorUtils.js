@@ -61,6 +61,7 @@ function closestColor(rgb) {
     if (closestDistanceSoFar < 1) {
       return closestColorFound;
     }
+    return undefined; // todo, return something better
   });
   return closestColorFound;
 }
