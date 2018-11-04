@@ -50,19 +50,19 @@ function colorDistance(rgb1, rgb2) {
 // Calculate the closest color from a list of options.
 function closestColor(rgb) {
   let closestColorFound = {};
-  let closestDistanceSoFar = 100;
+  let closestDistanceSoFar = 10000;
   let testDist = -1;
-  DMC.some((dmcColor) => {
-    testDist = colorDistance(rgb, dmcColor.RGB);
+
+  for (let i = 0; i < DMC.length; i += 1) {
+    testDist = colorDistance(rgb, DMC[i].RGB);
     if (testDist < closestDistanceSoFar) {
       closestDistanceSoFar = testDist;
-      closestColorFound = dmcColor;
+      closestColorFound = DMC[i];
     }
     if (closestDistanceSoFar < 1) {
-      return closestColorFound;
+      break;
     }
-    return undefined; // todo, return something better
-  });
+  }
   return closestColorFound;
 }
 
