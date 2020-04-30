@@ -50,7 +50,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.3",
     "jimp": "^0.3.11",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "node-vibrant": "^3.1.4",
     "pdfkit": "^0.8.3",
     "popper.js": "^1.15.0",
