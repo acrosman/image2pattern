@@ -1,12 +1,24 @@
-const electron = require('electron');
+const electron = require('electron'); // eslint-disable-line
+
 // Module to control application life.
 const {
   app,
   BrowserWindow,
+  dialog,
+  ipcMain,
 } = electron;
-require('electron-debug')();
+
+const isDev = !app.isPackaged;
+if (isDev) {
+  require("electron-debug")(); // eslint-disable-line
+}
+
+// Additional Tooling.
 const path = require('path');
 const url = require('url');
+
+// Get rid of the deprecated default.
+app.allowRendererProcessReuse = true;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -18,6 +30,15 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: display.workArea.width,
     height: display.workArea.height,
+    webPreferences: {
+      devTools: isDev,
+      nodeIntegration: false, // Disable nodeIntegration for security.
+      nodeIntegrationInWorker: false,
+      nodeIntegrationInSubFrames: false,
+      contextIsolation: true, // Protect against prototype pollution.
+      enableRemoteModule: false, // Turn off remote to avoid temptation.
+      preload: path.join(app.getAppPath(), 'src/preload.js'),
+    },
   });
 
   // and load the index.html of the app.
@@ -53,10 +74,95 @@ app.on('window-all-closed', () => {
   }
 });
 
+// Extra security filters.
+// See also: https://github.com/reZach/secure-electron-template
+app.on('web-contents-created', (event, contents) => {
+  // Block navigation.
+  // https://electronjs.org/docs/tutorial/security#12-disable-or-limit-navigation
+  contents.on('will-navigate', (navevent) => {
+    navevent.preventDefault();
+  });
+  contents.on('will-redirect', (navevent) => {
+    navevent.preventDefault();
+  });
+
+  // https://electronjs.org/docs/tutorial/security#11-verify-webview-options-before-creation
+  contents.on('will-attach-webview', (webevent, webPreferences) => {
+    // Strip away preload scripts.
+    delete webPreferences.preload; // eslint-disable-line
+    delete webPreferences.preloadURL; // eslint-disable-line
+
+    // Disable Node.js integration.
+    webPreferences.nodeIntegration = false; // eslint-disable-line
+  });
+
+  // Block new windows from within the App
+  // https://electronjs.org/docs/tutorial/security#13-disable-or-limit-creation-of-new-windows
+  contents.on('new-window', async (newevent) => {
+    newevent.preventDefault();
+  });
+});
+
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
     createWindow();
+  }
+});
+
+/**
+ * IPC Message Handlers
+ */
+ipcMain.on('PrepImage', (event, args) => {
+  // Sample useless response.
+  mainWindow.webContents.send('PrepImageResponse', {
+    message: 'This is a useless IPC message.',
+  });
+  return true;
+});
+ipcMain.on('I2P', (event, args) => {
+  // Sample useless response.
+  mainWindow.webContents.send('I2PResponse', {
+    message: 'This is a useless IPC message.',
+  });
+  return true;
+});
+
+// Dialog handler
+ipcMain.on('Dialog', (event, args) => {
+  if (args.request === 'image') {
+    dialog.showOpenDialog({
+      filters: { name: 'Images', extensions: ['png', 'jpg', 'gif', 'tiff', 'jpeg'] },
+    }, (fileNames) => {
+      if (fileNames === undefined) {
+        mainWindow.webContents.send('DialogResponse', {
+          message: 'No file selected',
+          file: null,
+        });
+      } else {
+        mainWindow.webContents.send('DialogResponse', {
+          message: `Loading File ${fileNames[0]}`,
+          file: fileNames[0],
+        });
+      }
+    });
+  }
+  if (args.request === 'outputTarget') {
+    dialog.showOpenDialog({
+      properties: ['openDirectory', 'createDirectory', 'promptToCreate'],
+    }, (fileNames) => {
+      if (fileNames === undefined) {
+        mainWindow.webContents.send('DialogResponse', {
+          message: 'No directory selected',
+          file: null,
+        });
+      } else {
+        mainWindow.webContents.send('DialogResponse', {
+          message: `Target Is ${fileNames[0]}`,
+          file: fileNames[0],
+        });
+      }
+    });
   }
 });

@@ -1,11 +1,5 @@
-// This file is required by the index.html file and will
+// This file is loaded by the index.html file and will
 // be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
-const { remote } = require('electron');
-const { dialog } = require('electron').remote;
-
-const PrepImage = remote.require('./src/prepImage.js');
-const I2P = remote.require('./src/image2pattern.js');
 
 function showMessage(message) {
   const logger = document.getElementById('console-message-list');
@@ -43,38 +37,64 @@ function showGeneratedImage(filePath) {
 
 // Setup select file handler.
 document.getElementById('select-file').addEventListener('click', () => {
-  dialog.showOpenDialog({
-    filters: { name: 'Images', extensions: ['png', 'jpg', 'gif', 'tiff', 'jpeg'] },
-  }, (fileNames) => {
-    if (fileNames === undefined) {
-      showMessage('No file selected');
-    } else {
-      document.getElementById('actual-file').value = fileNames[0];
-      showMessage(fileNames[0]);
-    }
+  window.api.send('Dialog', {
+    request: 'image',
   });
 }, false);
+
+window.api.receive('DialogResponse', (data) => {
+  if (data.file) {
+    document.getElementById('actual-file').value = data.file;
+    showMessage(data.file);
+  } else {
+    showMessage(data.message);
+  }
+});
 
 // Setup Output folder processing.
 document.getElementById('select-output-folder').addEventListener('click', () => {
-  dialog.showOpenDialog({
-    properties: ['openDirectory', 'createDirectory', 'promptToCreate'],
-  }, (fileNames) => {
-    if (fileNames === undefined) {
-      showMessage('No file selected');
-    } else {
-      document.getElementById('output-folder').value = fileNames[0];
-      showMessage(fileNames[0]);
-    }
+  window.api.send('Dialog', {
+    request: 'outputTarget',
   });
 }, false);
 
+window.api.receive('DialogResponse', (data) => {
+  if (data.file) {
+    document.getElementById('output-folder').value = data.file;
+    showMessage(data.file);
+  } else {
+    showMessage(data.message);
+  }
+});
+
 document.getElementById('generate-image').addEventListener('click', () => {
-  const settings = loadSettings();
-  PrepImage.prepImage(document.getElementById('actual-file').value, settings, showGeneratedImage);
+  window.api.send('PrepImage', {
+    file: document.getElementById('actual-file').value,
+    settings: loadSettings(),
+  });
 }, false);
 
+window.api.receive('PrepImageResponse', (data) => {
+  if (data.file) {
+    showGeneratedImage(data.file);
+    showMessage('Image Prepped');
+  } else {
+    showMessage(data.message);
+  }
+});
+
 document.getElementById('generate-pattern').addEventListener('click', () => {
-  const settings = loadSettings();
-  I2P.generatePattern(document.getElementById('image-file').value, settings);
+  window.api.send('I2P', {
+    file: document.getElementById('image-file').value,
+    settings: loadSettings(),
+  });
 }, false);
+
+window.api.receive('I2PResponse', (data) => {
+  if (data.file) {
+    // TODO Need to do something with the response!
+    showMessage('Image Prepped');
+  } else {
+    showMessage(data.message);
+  }
+});
