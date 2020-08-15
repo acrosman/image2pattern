@@ -10,12 +10,16 @@ const {
 
 const isDev = !app.isPackaged;
 if (isDev) {
-  require("electron-debug")(); // eslint-disable-line
+  require('electron-debug')(); // eslint-disable-line
 }
 
 // Additional Tooling.
 const path = require('path');
 const url = require('url');
+
+// Our libraries.
+const PrepImage = require('./src/prepImage.js');
+const I2P = require('./src/image2pattern.js');
 
 // Get rid of the deprecated default.
 app.allowRendererProcessReuse = true;
@@ -115,16 +119,19 @@ app.on('activate', () => {
  * IPC Message Handlers
  */
 ipcMain.on('PrepImage', (event, args) => {
-  // Sample useless response.
-  mainWindow.webContents.send('PrepImageResponse', {
-    message: 'This is a useless IPC message.',
+  PrepImage.prepImage(args.file, args.settings, (filePath) => {
+    mainWindow.webContents.send('PrepImageResponse', {
+      message: 'Image prepared for use',
+      file: filePath,
+    });
+    return true;
   });
-  return true;
 });
+
 ipcMain.on('I2P', (event, args) => {
-  // Sample useless response.
+  I2P.generatePattern(args.file, args.settings);
   mainWindow.webContents.send('I2PResponse', {
-    message: 'This is a useless IPC message.',
+    message: 'Pattern generated.',
   });
   return true;
 });
