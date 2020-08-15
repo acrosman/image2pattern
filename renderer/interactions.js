@@ -1,7 +1,7 @@
 /**
  * jQuery interactions. Events that need main thread processing are in renderer.js.
  */
-
+/* eslint-env jquery */
 function showColorControls(mode) {
   const full = '.control-set--full-color';
   const mono = '.control-set--monochrome';
@@ -15,7 +15,7 @@ function showColorControls(mode) {
   }
 }
 
-$('#color-mode-selector').on('change', (event) => {
+$('#color-mode-selector').on('change', () => {
   showColorControls($('#color-mode-selector').val());
 });
 showColorControls($('#color-mode-selector').val());
