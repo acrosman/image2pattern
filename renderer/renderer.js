@@ -42,15 +42,6 @@ document.getElementById('select-file').addEventListener('click', () => {
   });
 }, false);
 
-window.api.receive('DialogResponse', (data) => {
-  if (data.file) {
-    document.getElementById('actual-file').value = data.file;
-    showMessage(data.file);
-  } else {
-    showMessage(data.message);
-  }
-});
-
 // Setup Output folder processing.
 document.getElementById('select-output-folder').addEventListener('click', () => {
   window.api.send('Dialog', {
@@ -60,6 +51,27 @@ document.getElementById('select-output-folder').addEventListener('click', () => 
 
 window.api.receive('DialogResponse', (data) => {
   if (data.file) {
+    document.getElementById('actual-file').value = data.file;
+    showMessage(data.file);
+  } else {
+    showMessage(data.message);
+  }
+});
+
+window.api.receive('DialogResponse', (data) => {
+  if (data.file === null) {
+    showMessage(data.message);
+    return;
+  }
+
+  if (data.type === 'image') {
+    document.getElementById('actual-file').value = data.file;
+    showMessage(data.file);
+  } else {
+    showMessage(data.message);
+  }
+
+  if (data.type === 'directory') {
     document.getElementById('output-folder').value = data.file;
     showMessage(data.file);
   } else {

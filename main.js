@@ -131,38 +131,43 @@ ipcMain.on('I2P', (event, args) => {
 
 // Dialog handler
 ipcMain.on('Dialog', (event, args) => {
+  let fileNames;
   if (args.request === 'image') {
-    dialog.showOpenDialog({
+    fileNames = dialog.showOpenDialogSync({
       filters: { name: 'Images', extensions: ['png', 'jpg', 'gif', 'tiff', 'jpeg'] },
-    }, (fileNames) => {
-      if (fileNames === undefined) {
-        mainWindow.webContents.send('DialogResponse', {
-          message: 'No file selected',
-          file: null,
-        });
-      } else {
-        mainWindow.webContents.send('DialogResponse', {
-          message: `Loading File ${fileNames[0]}`,
-          file: fileNames[0],
-        });
-      }
     });
+
+    if (fileNames === undefined) {
+      mainWindow.webContents.send('DialogResponse', {
+        message: 'No file selected',
+        type: 'image',
+        file: null,
+      });
+    } else {
+      mainWindow.webContents.send('DialogResponse', {
+        message: `Loading File ${fileNames[0]}`,
+        type: 'image',
+        file: fileNames[0],
+      });
+    }
   }
   if (args.request === 'outputTarget') {
-    dialog.showOpenDialog({
+    fileNames = dialog.showOpenDialogSync({
       properties: ['openDirectory', 'createDirectory', 'promptToCreate'],
-    }, (fileNames) => {
-      if (fileNames === undefined) {
-        mainWindow.webContents.send('DialogResponse', {
-          message: 'No directory selected',
-          file: null,
-        });
-      } else {
-        mainWindow.webContents.send('DialogResponse', {
-          message: `Target Is ${fileNames[0]}`,
-          file: fileNames[0],
-        });
-      }
     });
+
+    if (fileNames === undefined) {
+      mainWindow.webContents.send('DialogResponse', {
+        message: 'No directory selected',
+        type: 'directory',
+        file: null,
+      });
+    } else {
+      mainWindow.webContents.send('DialogResponse', {
+        message: `Target Is ${fileNames[0]}`,
+        type: 'directory',
+        file: fileNames[0],
+      });
+    }
   }
 });
