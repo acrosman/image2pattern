@@ -3,16 +3,10 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'">
   <title>Image2Pattern</title>
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css">
-  <!-- Hattip: https://stackoverflow.com/a/37480521/24215 -->
-  <script>
-    if (typeof module === 'object') {
-      window.module = module;
-      module = undefined;
-    }
-  </script>
 
   <script src="node_modules/popper.js/dist/umd/popper.js"></script>
   <script src="node_modules/popper.js/dist/umd/popper-utils.js"></script>
@@ -20,9 +14,6 @@
   <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
   <script src="node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js"></script>
 
-  <script>
-    if (window.module) module = window.module;
-  </script>
 </head>
 
 <body>
@@ -32,17 +23,6 @@
     <div class="row">
       <div class="col-md-12">
         <h1>Converting images to cross-stitch patterns</h1>
-        <!-- All of the Node.js APIs are available in this renderer process. -->
-        <p>We are using Node.js
-          <script>
-            document.write(process.versions.node)
-          </script>, Chromium
-          <script>
-            document.write(process.versions.chrome)
-          </script>, and Electron
-          <script>
-            document.write(process.versions.electron)
-          </script>.</p>
         <div style="text-align:center;">
           <label for="actual-file">Select Source File</label>
           <input type="text" placeholder="Please select a file" id="actual-file" disabled="disabled" />
@@ -152,10 +132,7 @@
   </div>
 
 </body>
-<script>
-  // You can also require other files to run in this process
-  require('./renderer/renderer.js');
-  require('./renderer/interactions.js');
-</script>
+<script src="renderer/renderer.js"></script>
+<script src="renderer/interactions.js"></script>
 
 </html>
