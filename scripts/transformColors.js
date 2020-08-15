@@ -482,9 +482,11 @@ let rgb = {};
 for (let i = 0; i < DMC.length; i += 1) {
   rgb = cutils.hex2Rgb(DMC[i][2]);
   restructured[i] = {
+    // eslint-disable-next-line quote-props
     'DMC': DMC[i][0],
     Name: DMC[i][1],
     Hex: DMC[i][2],
+    // eslint-disable-next-line quote-props
     'RGB': rgb,
     lab: Vibrant.Util.rgbToCIELab(rgb.r, rgb.g, rgb.b),
   };
