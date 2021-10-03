@@ -5,8 +5,8 @@ const window = require('svgdom');
 const SVG = require('svgjs')(window);
 const Jimp = require('jimp');
 const path = require('path');
-const ColorUtils = require('./colorUtils.js');
-const threads = require('./threadColors.js');
+const ColorUtils = require('./colorUtils');
+const threads = require('./threadColors');
 
 const defaultSettings = {
   outputLocation: './outputs', // Directory for all program output.
