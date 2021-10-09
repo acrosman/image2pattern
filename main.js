@@ -140,7 +140,7 @@ ipcMain.on('I2P', (event, args) => {
 ipcMain.on('Dialog', (event, args) => {
   let fileNames;
   if (args.request === 'image') {
-    fileNames = dialog.showOpenDialogSync({
+    fileNames = dialog.showOpenDialogSync(mainWindow, {
       filters: { name: 'Images', extensions: ['png', 'jpg', 'gif', 'tiff', 'jpeg'] },
     });
 
@@ -159,7 +159,7 @@ ipcMain.on('Dialog', (event, args) => {
     }
   }
   if (args.request === 'outputTarget') {
-    fileNames = dialog.showOpenDialogSync({
+    fileNames = dialog.showOpenDialogSync(mainWindow, {
       properties: ['openDirectory', 'createDirectory', 'promptToCreate'],
     });
 
