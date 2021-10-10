@@ -6,6 +6,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'">
   <title>Image2Pattern</title>
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css">
 
   <script src="node_modules/popper.js/dist/umd/popper.js"></script>
@@ -20,77 +21,114 @@
   <div id="drawing" style="display: none;"></div>
 
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <h1>Converting images to cross-stitch patterns</h1>
-        <div style="text-align:center;">
-          <label for="actual-file">Select Source File</label>
-          <input type="text" placeholder="Please select a file" id="actual-file" disabled="disabled" />
-          <button type="button" class="btn green btn-secondary" id="select-file">Choose a file</button>
-          <button type="button" class="btn btn-primary" id="generate-image">Generate Image</button>
-          <button type="button" class="btn btn-primary green" id="generate-pattern" disabled >Generate Pattern</button>
-          <input type="hidden" value="" id="image-file">
-          <img src="" id="image-file-display">
-        </div>
-      </div>
+    <div class="text-center m-5">
+      <h1>Converting images to cross-stitch patterns</h1>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <p><strong>Settings:</strong></p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <label for="actual-file">Select Output Location</label>
-        <input type="text" value="./outputs" id="output-folder" disabled="disabled" />
-        <button type="button" class="btn green btn-secondary" id="select-output-folder">Choose a folder</button>
-      </div>
-      <div class="col-md-6">
-        <div >
-          <label for="edge-margin">Page edge margin</label>
-          <input type="number" value="50" max=500 min=0 id="edge-margin">
-        </div>
-        <div >
-          <label for="page-margin">Page top margin</label>
-          <input type="number" value="50" max=500 min=0 id="page-margin">
-        </div>
-        <div >
-          <label for="box-size">Box Size</label>
-          <input type="number" value="10" max=100 min=1 id="box-size">
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <h3>Images controls</h3>
-        <div id="image-controls" class="control-set--general">
-          <div class="row">
-            <div class="col-md-12">
-              <label for="image-max-width">Max Width</label>
-              <input type="number" min="10" value="150" id="image-max-width">
-              <label for="image-max-height">Max Height</label>
-              <input type="number" min="10" value="150" id="image-max-height">
-            </div>
-            <div class="col-md-12">
-              <label for="color-mode-selector">Color Mode</label>
-              <select id="color-mode-selector">
-                <option value="fullcolor">Full Color</option>
-                <option value="monochrome">Black and White</option>
-              </select>
+    
+    <div class="row justify-content-center">
+      <div class="col-md-4 select-file-wrapper">
+        <div class="row justify-content-center">
+          <div class="col-md-6 mb-3">
+            <div style="text-align:center;">
+              <label for="actual-file"><strong>Select Source File:</strong></label>
+              <input type="text" placeholder="Please select a file" id="actual-file" disabled="disabled" style="text-align: center;"/>
+              
             </div>
           </div>
         </div>
-        <div id="monochrome-controls" class="control-set--monochrome row">
-          <div class="col-md-6">
-            <h4>Monochrome pattern controls</h4>
+
+        <div class="row justify-content-center">
+          <div class="col-md-auto">
+            <input type="hidden" value="" id="image-file">
+            <img src="" class="mb-3" id="image-file-display">
+          </div>
+        </div>
+
+
+        <!-- buttons -->
+        <div class="row justify-content-center">
+          <div class="col-md-auto text-center m-1">
+            <button type="button" class="btn green btn-secondary" id="select-file">Choose a file</button>
+          </div>
+    
+          <div class="col-md-auto text-center m-1">
+            <button type="button" class="btn btn-primary" id="generate-image">Generate Image</button>
+          </div>
+    
+          <div class="col-md-auto text-center m-1">
+            <button type="button" class="btn btn-primary green" id="generate-pattern" disabled >Generate Pattern</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="row">
+      <div class="col-md-12">
+      </div>
+    </div> -->
+    
+    <div class="row justify-content-center mt-3">
+
+      <div class="col-3 settings-wrapper m-2 p-4">
+        <h4 class='pb-2'><strong>Settings:</strong></h4>
+        <label for="actual-file">Select Output Location</label><br/>
+        <input type="text" value="./outputs" id="output-folder" disabled="disabled" /><br/>
+        <button type="button" class="btn green btn-secondary mt-2" id="select-output-folder">Choose a folder</button>        
+      </div>
+
+      <div class="col-3 page-settings-wrapper m-2 p-4">
+        <div >
+          <label for="edge-margin"><strong>Page edge margin: </strong></label><br/>
+          <input type="number" value="50" max=500 min=0 id="edge-margin" class="mb-1">
+        </div>
+        <div >
+          <label for="page-margin"><strong>Page top margin: </strong></label><br/>
+          <input type="number" value="50" max=500 min=0 id="page-margin" class="mb-1">
+        </div>
+        <div >
+          <label for="box-size"><strong>Box Size:  </strong></label><br/>
+          <input type="number" value="10" max=100 min=1 id="box-size" class="mb-1">
+        </div>
+      </div>
+
+      <div class="col-3 image-controls m-2 p-4">
+        <div class="col align-items-center">
+          <h4 class='pb-2'><strong>Image Controls:</strong></h4>
+          <div id="image-controls" class="control-set--general">
+            <div class="row">
+              <div class="col-md-12">
+                <label for="image-max-width"><strong>Max Width:</strong></label><br/>
+                <input class='mb-2' type="number" min="10" value="150" id="image-max-width"><br/>
+                <label for="image-max-height"><strong>Max Height:</strong></label><br/>
+                <input class='mb-2' type="number" min="10" value="150" id="image-max-height">
+              </div>
+              <div class="col-md-12">
+                <label for="color-mode-selector"><strong>Color Mode: </strong></label>
+                <select id="color-mode-selector">
+                  <option value="fullcolor">Full Color</option>
+                  <option value="monochrome">Black and White</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>       
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        
+        <div id="monochrome-controls" class="control-set--monochrome row justify-content-center">
+          <div class="col-md-6 text-center">
+            <h4><strong>Monochrome Pattern Controls</strong></h4>
             <label for="break-color">Break point (color index to break as dark vs light)</label>
-            <input type="number" value="10000" id="break-color">
+            <input type="number" value="10000" id="break-color"><br/>
             <label for="opacity-level">Fill Opacity</label>
             <input type="number" value="0.3" step=0.1 max=1 min=0 id="opacity-level">
           </div>
         </div>
-        <div id="full-color-controls" class="control-set--full-color row">
-          <div class="col-md-6">
+        <div id="full-color-controls" class="control-set--full-color row justify-content-center">
+          <div class="col-md-auto text-center m-3">
             <h4>Full color pattern controls</h4>
             <label for="color-count-limit">Color Count</label>
             <input type="number" value="64" max="472" min="2" id="color-count-limit">
@@ -98,22 +136,22 @@
         </div>
       </div>
     </div>
-    <div class="row control-set--monochrome">
-      <div class="col-md-4">
+    <div class="row control-set--monochrome justify-content-center">
+      <div class="col-md-3 color-wrapper m-2 p-4">
         <div>
           <label for="dark-color-swatch">Dark color</label>
           <input type="text" id="dark-color" value="#444444" disabled>
           <div id="dark-color-swatch"></div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3 color-wrapper m-2 p-4">
         <div>
           <label for="light-color-swatch">Light color</label>
           <input type="text" id="light-color" value="#FFFF22" disabled>
           <div id="light-color-swatch"></div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3 color-wrapper m-2 p-4">
         <div>
           <label for="grid-color-swatch">Grid line color</label>
           <input type="text" id="grid-color" value="#000000" disabled>
@@ -121,6 +159,9 @@
         </div>
       </div>
     </div>
+
+    <hr/>
+
     <div class="row">
       <div class="col-md-12">
         <h2>Messages</h2>

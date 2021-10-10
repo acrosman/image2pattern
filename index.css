@@ -1,0 +1,37 @@
+.select-file-wrapper{
+    background-color: lightgray;
+    border-radius: 5px;
+    padding: 1.5rem;
+    box-shadow: rgba(0, 0, 0, 0.175) 5px 5px 15px;
+}
+
+label{
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.control-set--monochrome{
+    margin-top: 2rem;
+}
+
+.control-set--monochrome label{
+    margin-bottom: 1rem;
+}
+
+#actual-file{
+    max-width: 100%;
+}
+
+input{
+    max-width: 100%;
+}
+
+.settings-wrapper,
+.page-settings-wrapper,
+.image-controls,
+.color-wrapper{
+    background-color: lightgray;
+    box-shadow: rgba(0, 0, 0, 0.175) 5px 5px 15px;
+    border-radius: 5px;
+}
+
