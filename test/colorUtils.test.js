@@ -1,4 +1,3 @@
-const Chai = require('chai');
 const Chance = require('chance');
 const ColorUtils = require('../src/colorUtils');
 
@@ -9,34 +8,34 @@ describe('Color Utils', () => {
       const black = '#000000';
 
       const actualRGB = ColorUtils.hex2Rgb(black);
-      Chai.expect(actualRGB.r).to.equal(0);
-      Chai.expect(actualRGB.g).to.equal(0);
-      Chai.expect(actualRGB.b).to.equal(0);
+      expect(actualRGB.r).toBe(0);
+      expect(actualRGB.g).toBe(0);
+      expect(actualRGB.b).toBe(0);
     });
 
     it('should white hex to RGB', () => {
       const white = '#ffffff';
 
       const actualRGB = ColorUtils.hex2Rgb(white);
-      Chai.expect(actualRGB.r).to.equal(255);
-      Chai.expect(actualRGB.g).to.equal(255);
-      Chai.expect(actualRGB.b).to.equal(255);
+      expect(actualRGB.r).toBe(255);
+      expect(actualRGB.g).toBe(255);
+      expect(actualRGB.b).toBe(255);
     });
 
     it('should blue hex to RGB', () => {
       const blue = '#0000FF';
 
       const actualRGB = ColorUtils.hex2Rgb(blue);
-      Chai.expect(actualRGB.r).to.equal(0);
-      Chai.expect(actualRGB.g).to.equal(0);
-      Chai.expect(actualRGB.b).to.equal(255);
+      expect(actualRGB.r).toBe(0);
+      expect(actualRGB.g).toBe(0);
+      expect(actualRGB.b).toBe(255);
     });
 
     it('should return null for string', () => {
       const randomString = chance.string();
 
       const actualRGB = ColorUtils.hex2Rgb(randomString);
-      Chai.expect(actualRGB).to.equal(null);
+      expect(actualRGB).toBeNull();
     });
   });
 
@@ -49,7 +48,7 @@ describe('Color Utils', () => {
       };
 
       const actualHex = ColorUtils.rgb2Hex(black);
-      Chai.expect(actualHex).to.equal('#000000');
+      expect(actualHex).toBe('#000000');
     });
 
     it('should white RGB to hex', () => {
@@ -60,7 +59,7 @@ describe('Color Utils', () => {
       };
 
       const actualHex = ColorUtils.rgb2Hex(white);
-      Chai.expect(actualHex).to.equal('#ffffff');
+      expect(actualHex).toBe('#ffffff');
     });
 
     it('should blue RGB to hex', () => {
@@ -71,7 +70,7 @@ describe('Color Utils', () => {
       };
 
       const actualHex = ColorUtils.rgb2Hex(blue);
-      Chai.expect(actualHex).to.equal('#0000ff');
+      expect(actualHex).toBe('#0000ff');
     });
   });
 
@@ -81,7 +80,7 @@ describe('Color Utils', () => {
 
       const actualInt = ColorUtils.cssHex2JimpInt(black);
 
-      Chai.expect(actualInt).to.equal(255);
+      expect(actualInt).toBe(255);
     });
 
     it('should convert black to Jimp Int with alpha transparent', () => {
@@ -89,7 +88,7 @@ describe('Color Utils', () => {
 
       const actualInt = ColorUtils.cssHex2JimpInt(black, '00');
 
-      Chai.expect(actualInt).to.equal(0);
+      expect(actualInt).toBe(0);
     });
 
     it('should convert white to Jimp Int with solid alpha', () => {
@@ -97,7 +96,7 @@ describe('Color Utils', () => {
 
       const actualInt = ColorUtils.cssHex2JimpInt(white);
 
-      Chai.expect(actualInt).to.equal(4294967295);
+      expect(actualInt).toBe(4294967295);
     });
 
     it('should convert blue to Jimp Int with solid alpha', () => {
@@ -105,7 +104,7 @@ describe('Color Utils', () => {
 
       const actualInt = ColorUtils.cssHex2JimpInt(blue);
 
-      Chai.expect(actualInt).to.equal(65535);
+      expect(actualInt).toBe(65535);
     });
   });
 
@@ -115,7 +114,7 @@ describe('Color Utils', () => {
 
       const actualHex = ColorUtils.int2CssHex(blue);
 
-      Chai.expect(actualHex).to.equal('#0000FF');
+      expect(actualHex).toBe('#0000FF');
     });
 
     it('should convert red Jimp Int to red hex', () => {
@@ -123,7 +122,7 @@ describe('Color Utils', () => {
 
       const actualHex = ColorUtils.int2CssHex(red);
 
-      Chai.expect(actualHex).to.equal('#FF0000');
+      expect(actualHex).toBe('#FF0000');
     });
 
     it('should convert green Jimp Int to green hex', () => {
@@ -131,7 +130,7 @@ describe('Color Utils', () => {
 
       const actualHex = ColorUtils.int2CssHex(green);
 
-      Chai.expect(actualHex).to.equal('#00FF00');
+      expect(actualHex).toBe('#00FF00');
     });
 
     it('should convert white Jimp Int to white hex', () => {
@@ -139,7 +138,7 @@ describe('Color Utils', () => {
 
       const actualHex = ColorUtils.int2CssHex(white);
 
-      Chai.expect(actualHex).to.equal('#FFFFFF');
+      expect(actualHex).toBe('#FFFFFF');
     });
 
     it('should convert black Jimp Int to black hex', () => {
@@ -147,7 +146,7 @@ describe('Color Utils', () => {
 
       const actualHex = ColorUtils.int2CssHex(black);
 
-      Chai.expect(actualHex).to.equal('#000000');
+      expect(actualHex).toBe('#000000');
     });
   });
 
@@ -166,7 +165,7 @@ describe('Color Utils', () => {
 
       const actualDistance = ColorUtils.colorDistance(rgbColor1, rgbColor2);
 
-      Chai.expect(actualDistance).to.be.equal(95.58064652484387);
+      expect(actualDistance).toBe(95.58064652484387);
     });
 
     it('Should calculate distance between two closely related colors', () => {
@@ -183,7 +182,7 @@ describe('Color Utils', () => {
 
       const actualDistance = ColorUtils.colorDistance(rgbColor1, rgbColor2);
 
-      Chai.expect(actualDistance).to.be.equal(2.3906196073816792);
+      expect(actualDistance).toBe(2.3906196073816792);
     });
   });
 
@@ -197,7 +196,7 @@ describe('Color Utils', () => {
 
       const closestColor = ColorUtils.closestColor(rgb);
 
-      Chai.expect(closestColor.Name).to.eql('Black');
+      expect(closestColor.Name).toEqual('Black');
     });
 
     it('should pick closest white if given a white color', () => {
@@ -209,7 +208,7 @@ describe('Color Utils', () => {
 
       const closestColor = ColorUtils.closestColor(rgb);
 
-      Chai.expect(closestColor.Name).to.eql('White');
+      expect(closestColor.Name).toEqual('White');
     });
 
     it('should pick closest color if given a color', () => {
@@ -221,7 +220,7 @@ describe('Color Utils', () => {
 
       const closestColor = ColorUtils.closestColor(rgb);
 
-      Chai.expect(closestColor.Name).to.eql('Parrot Green - LT');
+      expect(closestColor.Name).toEqual('Parrot Green - LT');
     });
   });
 
@@ -235,7 +234,7 @@ describe('Color Utils', () => {
 
       const actualYIQ = ColorUtils.isDarkColor(color);
 
-      Chai.expect(actualYIQ).to.equal(true);
+      expect(actualYIQ).toBe(true);
     });
 
     it('should return false if YIQ brightness value is less than 128', () => {
@@ -247,7 +246,7 @@ describe('Color Utils', () => {
 
       const actualYIQ = ColorUtils.isDarkColor(color);
 
-      Chai.expect(actualYIQ).to.equal(false);
+      expect(actualYIQ).toBe(false);
     });
   });
 });
