@@ -12,24 +12,9 @@
     "simple-debug": "node tests/index.js",
     "debug": "electron --inspect=5858 .",
     "rebuild-colors": "node scripts/transformColors.js",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder -wlm",
-    "postinstall": "electron-builder install-app-deps",
+    "pack": "electron-forge package",
+    "dist": "electron-forge make",
     "test": "mocha"
-  },
-  "build": {
-    "appId": "com.electron.image2pattern",
-    "productName": "image2pattern",
-    "mac": {
-      "category": "public.app-category.utilities",
-      "target": "zip"
-    },
-    "win": {
-      "target": "zip"
-    },
-    "linux": {
-      "target": "zip"
-    }
   },
   "keywords": [
     "images",
@@ -53,6 +38,8 @@
     "svgjs": "^2.6.2"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^8.0.1",
+    "@electron-forge/maker-zip": "^8.0.1",
     "chai": "^4.2.0",
     "debug-menu": "^0.6.1",
     "electron": "^44",
