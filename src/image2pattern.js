@@ -33,7 +33,7 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
   let rx; let ry;
   let currentColor = config.lightColor;
 
-  console.log(`Creating image starting at ${startX}x${startY} to cover ${width}x${height}`);
+  //  console.log(`Creating image starting at ${startX}x${startY} to cover ${width}x${height}`);
 
   const draw = SVG(window.document).size(drawingWidth, drawingHeight);
 
@@ -42,9 +42,9 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
     currentColor = ColorUtils.int2CssHex(image.getPixelColor(x, y));
     if (settings.colorMode !== 'monochrome') {
       const color = ColorUtils.hex2Rgb(currentColor);
-      if (color === null) {
-        console.log(`wtf with ${currentColor} from ${image.getPixelColor(x, y)}`);
-      }
+      // if (color === null) {
+      //   console.log(`wtf with ${currentColor} from ${image.getPixelColor(x, y)}`);
+      // }
       const thread = threads.closestThreadColor(color);
       // TODO: Refactor to remove hasOwnProperty and param reassignment.
       if (Object.prototype.hasOwnProperty.call(thread, 'DMC')) {
@@ -65,8 +65,10 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
     const countSize = 10;
     if (rx % (countSize * config.boxSize) === 0 && ry % (countSize * config.boxSize) === 0) {
       draw.rect(config.boxSize * countSize, config.boxSize * countSize)
-        .move(rx - (startX % countSize) * config.boxSize,
-          ry - (startY % countSize) * config.boxSize)
+        .move(
+          rx - (startX % countSize) * config.boxSize,
+          ry - (startY % countSize) * config.boxSize,
+        )
         .fill({ color: '#FFF', opacity: 0 })
         .stroke({ color: config.lineColor, opacity: 1, width: 2 })
         .opacity(1);
@@ -80,11 +82,11 @@ async function drawPatternPage(image, startX, startY, width, height, settings, c
       imageFilePath,
       draw.svg(),
       (err) => {
-        if (err) {
-          return console.log(err);
-        }
-        console.log(`${imageFilePath} saved!`);
-        return err;
+        //   if (err) {
+        //   return console.log(err);
+        // }
+        //   console.log(`${imageFilePath} saved!`);
+        //   err
       },
     );
   }
@@ -154,7 +156,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     },
     addThread(thread) {
       if (!Object.prototype.hasOwnProperty.call(this.threads, thread.DMC)) {
-        this.threads[thread.DMC] = Object.assign({}, thread);
+        this.threads[thread.DMC] = { ...thread };
         this.threads[thread.DMC].symbol = this.genSymbol();
       }
     },
@@ -179,8 +181,15 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     // Set the pixal range for this page.
     pageHeight = Math.min(pageBoxCountHeight, height - pageStartY);
     pageWidth = Math.min(pageBoxCountWidth, width - pageStartX);
-    promisedPage = drawPatternPage(image, pageStartX, pageStartY, pageWidth,
-      pageHeight, config, threadIndex);
+    promisedPage = drawPatternPage(
+      image,
+      pageStartX,
+      pageStartY,
+      pageWidth,
+      pageHeight,
+      config,
+      threadIndex,
+    );
     promisedPage.pageNumber = page;
     pages.push(promisedPage);
     // Carry the current X position over as the start of the next page.
@@ -189,9 +198,9 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
   }
   try {
     pages = await Promise.all(pages);
-    console.log('Done generating page images');
+    // console.log('Done generating page images');
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     process.exit(1);
   }
 
@@ -215,7 +224,7 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
     }).text(`Page: ${i + 1} of ${pages.length}. File: ${pages[i]}`, 50, 20);
 
     Svg2Pdf(pdfFile, pages[i].svg(), config.edgeMargin, config.pageMargin, { assumePt: true });
-    console.log(`Page ${i} generated`);
+    // console.log(`Page ${i} generated`);
     pages[i] = null;
   }
 
@@ -239,16 +248,16 @@ async function patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile,
         .text(colorInfo, { continued: true }).fillColor(colors[i].Hex).text('‎■');
     }
 
-    console.log(threadIndex.threads);
+    // console.log(threadIndex.threads);
   }
 
   pdfFile.end();
 
-  console.log('Generation complete');
+  // console.log('Generation complete');
 }
 
 function createPattern(imagePath, settings) {
-  const config = Object.assign({}, defaultSettings, settings);
+  const config = { ...defaultSettings, ...settings };
 
   // TODO: Add support for picking page size.
   const pdfFile = new PdfKit();
@@ -272,7 +281,7 @@ function createPattern(imagePath, settings) {
       patternGen(image, pageBoxCountWidth, pageBoxCountHeight, pdfFile, config);
     })
     .catch((err) => {
-      console.error(err);
+      //      console.error(err);
     });
 }
 

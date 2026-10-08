@@ -37,7 +37,7 @@ function MonochromeProcess(image, outputPath, settings) {
 }
 
 async function prepImage(imagePath, settings, callback) {
-  const config = Object.assign({}, defaultSettings, settings);
+  const config = { ...defaultSettings, ...settings };
   const filePath = path.join(config.outputLocation, 'images', imagePath);
 
   // TODO: Trim White space from edges.
@@ -48,7 +48,7 @@ async function prepImage(imagePath, settings, callback) {
   config.darkColor = ColorUtils.cssHex2JimpInt(config.darkColor);
   config.lightColor = ColorUtils.cssHex2JimpInt(config.lightColor);
 
-  console.log(config);
+  // console.log(config);
 
   try {
     // DEBUG: During this await prepImage gets recalled while promise being
@@ -62,7 +62,7 @@ async function prepImage(imagePath, settings, callback) {
     }
     callback(filePath);
   } catch (err) {
-    console.log(err);
+    //    console.log(err);
   }
 }
 
