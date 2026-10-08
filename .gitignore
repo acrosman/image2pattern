@@ -2,8 +2,9 @@
 images
 outputs
 
-# Distro folder
+# Distro folders
 dist
+out
 
 # Logs
 logs
